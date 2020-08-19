@@ -1,0 +1,80 @@
+import { State } from 'constant';
+
+export const SERVER_CONNECTED = 'SERVER_CONNECTED';
+export const serverConnected = (connected) => async (dispatch) => {
+  dispatch({
+    type: SERVER_CONNECTED,
+    connected,
+  });
+};
+
+export const ACTIVATE_CONNECTION = 'ACTIVATE_CONNECTION';
+export const activateConnection = (active) => async (dispatch) => {
+  dispatch({
+    type: ACTIVATE_CONNECTION,
+    active,
+  });
+};
+
+export const UPDATE_PURSES = 'UPDATE_PURSES';
+export const updatePurses = (data) => async (dispatch) => {
+  if (data[2].extent.length === 0) {
+    localStorage.removeItem('stock');
+  }
+  var stockStorage = localStorage.getItem('stock');
+  if (!!stockStorage) {
+    stockStorage = JSON.parse(stockStorage);
+    stockStorage.forEach((id) => {
+      var plant = data[2].extent.filter((item) => item.plantId === id);
+      plant.map((item) => (item.state = State.PLANTED));
+    });
+  }
+
+  dispatch({
+    type: UPDATE_PURSES,
+    purses: data,
+  });
+};
+
+export const UPDATE_PLANTS = 'UPDATE_PLANTS';
+export const updatePlants = (plants) => (dispatch) => {
+  dispatch({
+    type: UPDATE_PLANTS,
+    plants,
+  });
+};
+
+export const CHANGE_STATE_PLANT = 'CHANGE_STATE_PLANT';
+export const changeStatePlant = (id, _state) => (dispatch, getState) => {
+  let state = getState();
+  let plants = state.plants;
+  let plant = plants[id - 1];
+  plant.state = _state;
+  dispatch({
+    type: CHANGE_STATE_PLANT,
+    plants,
+  });
+  console.log('plants', plants);
+};
+
+export const TEST = 'TEST';
+export const changeStatePursesPlant = (id, _state) => (dispatch, getState) => {
+  let state = getState();
+  let purses = state.purses;
+
+  if (purses[2]) {
+    var plant = purses[2].extent.filter((item) => item.plantId === id);
+    plant.map((item) => (item.state = _state));
+    dispatch({
+      type: TEST,
+      test: purses,
+    });
+  }
+};
+
+export const RESET_ALL = 'RESET_ALL';
+export const resetAll = () => (dispatch) => {
+  dispatch({
+    type: RESET_ALL,
+  });
+};
