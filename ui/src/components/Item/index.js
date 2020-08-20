@@ -10,7 +10,7 @@ export default function Item(props) {
       </div>
 
       <div className='bg-swapItem'>
-        <img src={props.item.plant_img} className=' h-160px w-100 ' alt='' />
+        <img src={props.item.plantImg} className=' h-160px w-100 ' alt='' />
       </div>
 
       <div>

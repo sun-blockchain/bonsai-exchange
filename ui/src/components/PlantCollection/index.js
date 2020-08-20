@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Button } from 'antd';
-import { State } from 'constant';
+import { PLANT_STATUS } from 'constant';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from 'store/actions';
 
@@ -12,22 +12,12 @@ function PlantCollection(props) {
   const [plants, setPlants] = useState([]);
 
   useEffect(() => {
-    const plantInStock = state.plants.filter((item) => item.state === State.INSTOCK);
+    const plantInStock = state.plants.filter((item) => item.plantStatus === PLANT_STATUS.INSTOCK);
     setPlants(plantInStock);
   }, [state]);
 
   const handleTakeOut = (id) => {
-    var stockStorage = localStorage.getItem('stock');
-
-    if (!!stockStorage) {
-      stockStorage = JSON.parse(stockStorage);
-    } else {
-      stockStorage = [];
-    }
-    stockStorage.push(id);
-    stockStorage = JSON.stringify(stockStorage);
-    localStorage.setItem('stock', stockStorage);
-    dispatch(actions.changeStatePursesPlant(id, State.PLANTED));
+    dispatch(actions.changePlantStatus(id, PLANT_STATUS.PLANTED));
     props.onClose();
   };
 
@@ -46,7 +36,7 @@ function PlantCollection(props) {
           return (
             <Row key={item.id} className='bgc-w item'>
               <div className='plantAva bgc-blue'>
-                <img src={item.plant_img} className='plantImg' alt='' />
+                <img src={item.plantImg} className='plantImg' alt='' />
               </div>
               <div className='center-ver'>
                 <strong>{item.name}</strong> <br />
@@ -54,7 +44,7 @@ function PlantCollection(props) {
               <Button
                 type='primary'
                 className='bgc-green radius align-center'
-                onClick={() => handleTakeOut(item.plantId)}
+                onClick={() => handleTakeOut(item.id)}
               >
                 <strong>Plant</strong>
               </Button>

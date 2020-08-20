@@ -32,17 +32,12 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         purses: action.purses,
       };
-    case connect.TEST:
-      return {
-        ...state,
-        test: action.test,
-      };
     case connect.UPDATE_PLANTS:
       return {
         ...state,
         plants: action.plants,
       };
-    case connect.CHANGE_STATE_PLANT:
+    case connect.CHANGE_PLANT_STATUS:
       return {
         ...state,
         plants: action.plants,
