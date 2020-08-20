@@ -1,19 +1,21 @@
 import React from 'react';
 import { Row } from 'antd';
-import { useSelector } from 'react-redux';
-import { State } from 'constant';
+import { useSelector, useDispatch } from 'react-redux';
+import { PLANT_STATUS } from 'constant';
 import Item from 'components/Item';
+import * as actions from 'store/actions';
 
 import './style.css';
 
 function Store(props) {
+  const dispatch = useDispatch();
+
   const plants = useSelector((state) =>
-    state.plants.filter((item) => item.state === State.INSTORE)
+    state.plants.filter((item) => item.plantStatus === PLANT_STATUS.INSTORE)
   );
 
   const handleBuyPlant = (item) => {
-    const plants = [];
-    plants.push(item);
+    dispatch(actions.changePlantStatus(item.id, PLANT_STATUS.INSTOCK));
     props.onClose();
   };
 
@@ -22,7 +24,7 @@ function Store(props) {
       {plants.length !== 0 ? (
         <Row gutter={[20, 20]} className='overflow bgc-smoke'>
           {plants.map((item) => {
-            return <Item key={item.plantId} onBuyPlant={() => handleBuyPlant(item)} item={item} />;
+            return <Item key={item.id} onBuyPlant={() => handleBuyPlant(item)} item={item} />;
           })}
         </Row>
       ) : (
