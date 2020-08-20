@@ -11,6 +11,7 @@ function Top() {
 
   useEffect(() => {
     dispatch(actions.activateConnection(true));
+    dispatch(actions.updatePurses);
   }, [dispatch]);
 
   return (

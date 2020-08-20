@@ -1,0 +1,37 @@
+/* @import "antd/dist/antd.css"; */
+
+.gutter-box {
+  padding: 8px 0;
+  background: #00a0e9;
+}
+[data-theme='dark'] .gutter-box {
+  background: #028ac8;
+}
+
+.overflow {
+  overflow: auto;
+}
+
+.bg-swapItem {
+  background-image: url(../../images/background.png) !important;
+  /* background: linear-gradient(0deg, #89f7fe 0%, #66a6ff 100%); */
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.bgc-swapItem {
+  background-color: turquoise;
+}
+
+.mg-side-10px {
+  margin: 0 10px !important;
+}
+
+.h-160px {
+  height: 160px;
+}
+
+.w-100 {
+  width: 100%;
+}

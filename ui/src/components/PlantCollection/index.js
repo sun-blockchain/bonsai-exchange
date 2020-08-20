@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Button } from 'antd';
 import { State } from 'constant';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,13 @@ import './style.css';
 
 function PlantCollection(props) {
   const dispatch = useDispatch();
-  const purses = useSelector((state) => state.purses);
+  const state = useSelector((state) => state);
+  const [plants, setPlants] = useState([]);
+
+  useEffect(() => {
+    const plantInStock = state.plants.filter((item) => item.state === State.INSTOCK);
+    setPlants(plantInStock);
+  }, [state]);
 
   const handleTakeOut = (id) => {
     var stockStorage = localStorage.getItem('stock');
@@ -25,9 +31,7 @@ function PlantCollection(props) {
     props.onClose();
   };
 
-  const plant_inStock =
-    !!purses[2] && !!purses[2].extent ? purses[2].extent.filter((item) => !item.state) : [];
-  if (plant_inStock.length === 0) {
+  if (plants.length === 0) {
     return (
       <div>
         <div className='collection align-center'>
@@ -38,9 +42,9 @@ function PlantCollection(props) {
   } else {
     return (
       <div className='collection'>
-        {plant_inStock.map((item) => {
+        {plants.map((item) => {
           return (
-            <Row key={item.plantId} className='bgc-w item'>
+            <Row key={item.id} className='bgc-w item'>
               <div className='plantAva bgc-blue'>
                 <img src={item.plant_img} className='plantImg' alt='' />
               </div>
