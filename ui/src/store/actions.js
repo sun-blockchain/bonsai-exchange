@@ -1,4 +1,4 @@
-import { State } from 'constant';
+import { plants_init } from 'constant';
 
 export const SERVER_CONNECTED = 'SERVER_CONNECTED';
 export const serverConnected = (connected) => async (dispatch) => {
@@ -18,21 +18,21 @@ export const activateConnection = (active) => async (dispatch) => {
 
 export const UPDATE_PURSES = 'UPDATE_PURSES';
 export const updatePurses = (data) => async (dispatch) => {
-  if (data[2].extent.length === 0) {
-    localStorage.removeItem('stock');
-  }
-  var stockStorage = localStorage.getItem('stock');
-  if (!!stockStorage) {
-    stockStorage = JSON.parse(stockStorage);
-    stockStorage.forEach((id) => {
-      var plant = data[2].extent.filter((item) => item.plantId === id);
-      plant.map((item) => (item.state = State.PLANTED));
-    });
-  }
+  // if (data[2].extent.length === 0) {
+  //   localStorage.removeItem('stock');
+  // }
+  // var stockStorage = localStorage.getItem('stock');
+  // if (!!stockStorage) {
+  //   stockStorage = JSON.parse(stockStorage);
+  //   stockStorage.forEach((id) => {
+  //     var plant = data[2].extent.filter((item) => item.plantId === id);
+  //     plant.map((item) => (item.state = State.PLANTED));
+  //   });
+  // }
 
   dispatch({
     type: UPDATE_PURSES,
-    purses: data,
+    purses: plants_init,
   });
 };
 

@@ -1,6 +1,7 @@
 import * as connect from './actions';
 
 import dappConstants from 'conf/dappConstants';
+import { plants_init } from 'constant';
 
 const instanceId = dappConstants.INSTANCE_REG_KEY;
 
@@ -10,7 +11,7 @@ const initialState = {
   account: null,
   purses: [],
   instanceId,
-  plants: [],
+  plants: plants_init,
   test: [],
 };
 
