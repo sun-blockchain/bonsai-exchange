@@ -18,10 +18,16 @@ sudo chmod +x ./start.sh
 ./start.sh
 ```
 
-### Deploy with tbears
+### Deploy Bonsai Contract
 
 ```bash
-tbears deploy bonsai-exchange -k keystores/keystore_test1.json -c config/tbears_cli_config.json
+tbears deploy bonsai -k keystores/keystore_test1.json -c config/tbears_cli_config.json
+```
+
+### Deploy SunCoin Contract
+
+```bash
+tbears deploy suncoin -k keystores/keystore_test1.json -c config/deploy_suncoin_local.json
 ```
 
 note: use **test1_Account** as password
@@ -70,10 +76,16 @@ docker cp <file path> <container id>:/tbears/icon­dice roll/keystores/keystore1
 - [http://icon-faucet.ibriz.ai](http://icon-faucet.ibriz.ai/)
 - [https://faucet.reliantnode.com/](https://faucet.reliantnode.com/)
 
-### Deploy
+### Deploy Bonsai Contract
 
 ```bash
-tbears deploy bonsai-exchange -f hxe9d75191906ccc604fc1e45a9f3c59fb856c215f -k keystores/keystore1.json -c config/tbears_cli_config_testnet.json
+tbears deploy bonsai -f hxe9d75191906ccc604fc1e45a9f3c59fb856c215f -k keystores/keystore1.json -c config/tbears_cli_config_testnet.json
+```
+
+### Deploy SunCoin Contract
+
+```bash
+tbears deploy suncoin -f hxe9d75191906ccc604fc1e45a9f3c59fb856c215f -k keystores/keystore1.json -c config/deploy_suncoin_testnet.json
 ```
 
 note: use **p@ssword1** as password
