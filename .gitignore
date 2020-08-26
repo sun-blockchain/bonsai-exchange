@@ -1,4 +1,6 @@
-keystores/keystore1.json
+keystores/*
 .score
 .statedb
 tbears.log
+cli/node_modules
+cli/.env

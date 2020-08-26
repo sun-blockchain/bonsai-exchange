@@ -38,16 +38,20 @@ class TokenStandard:
 
 class BonSai(IconScoreBase, TokenStandard):
     _OWNED_TOKEN_COUNT = 'owned_token_count'  # Track token count against token owners
+    _TOKEN_INDEX_COUNT = 'token_index_count'  # increment 
     _TOKEN_OWNER = 'token_owner'  # Track token owner against token ID
     _TOKEN_APPROVALS = 'token_approvals'  # Track token approved owner against token ID
+    _TOKEN_PRICE = 'token_price'
 
     _ZERO_ADDRESS = Address.from_prefix_and_int(AddressPrefix.EOA, 0)
 
     def __init__(self, db: IconScoreDatabase) -> None:
         super().__init__(db)
         self._ownedTokenCount = DictDB(self._OWNED_TOKEN_COUNT, db, value_type=int)
+        self._tokenIndexCount = VarDB(self._TOKEN_INDEX_COUNT, db, value_type=int)
         self._tokenOwner = DictDB(self._TOKEN_OWNER, db, value_type=Address)
         self._tokenApprovals = DictDB(self._TOKEN_APPROVALS, db, value_type=Address)
+        self._tokenPrice = DictDB(self._TOKEN_PRICE, db, value_type=int)
 
     def on_install(self) -> None:
         super().on_install()
@@ -61,13 +65,17 @@ class BonSai(IconScoreBase, TokenStandard):
 
     @external(readonly=True)
     def symbol(self) -> str:
-        return "BONSAI"
+        return "BS"
 
     @external(readonly=True)
     def balanceOf(self, _owner: Address) -> int:
         if _owner is None or self._is_zero_address(_owner):
             revert("Invalid owner")
         return self._ownedTokenCount[_owner]
+
+    @external(readonly=True)
+    def getLatestTokenIndex(self) -> int:
+        return self._tokenIndexCount.get()
 
     @external(readonly=True)
     def ownerOf(self, _tokenId: int) -> Address:
@@ -116,20 +124,41 @@ class BonSai(IconScoreBase, TokenStandard):
         if _to is None or self._is_zero_address(_to):
             revert("You can't transfer to a zero address")
 
+        _price = self._tokenPrice[_tokenId]
+
         self._clear_approval(_tokenId)
         self._remove_tokens_from(_from, _tokenId)
-        self._add_tokens_to(_to, _tokenId)
+        self._add_tokens_to(_to, _tokenId, _price)
         self.Transfer(_from, _to, _tokenId)
         Logger.debug(f'Transfer({_from}, {_to}, {_tokenId}, TAG)')
 
     @external
-    def mint(self, _to: Address, _tokenId: int):
+    @payable
+    def createBonsai(self):
+        price = self.msg.value
+        tokenId = self._tokenIndexCount.get()
+        tokenId += 1
+
+        if price <= 0 or price > 100 * 10 ** 18:
+            Logger.info(f'Price {price} out of range.', TAG)
+            revert(f'Price {price} out of range.')
+        
+        self._add_tokens_to(self.msg.sender, tokenId, price)
+        self._tokenIndexCount.set(tokenId)
+        self.Transfer(self._ZERO_ADDRESS, self.msg.sender, tokenId)
+
+    @external
+    def mint(self, _to: Address, _price: int):
         # Mint a new NFT token
+        _tokenId = self._tokenIndexCount.get()
+        _tokenId += 1
+
         if self.msg.sender != self.owner:
             revert("You don't have permission to mint NFT")
         if _tokenId in self._tokenOwner:
             revert("Token already exists")
-        self._add_tokens_to(_to, _tokenId)
+        self._add_tokens_to(_to, _tokenId, _price)
+        self._tokenIndexCount.set(_tokenId)
         self.Transfer(self._ZERO_ADDRESS, _to, _tokenId)
 
     @external
@@ -165,10 +194,10 @@ class BonSai(IconScoreBase, TokenStandard):
         self._ownedTokenCount[_from] -= 1
         self._tokenOwner[_tokenId] = self._ZERO_ADDRESS
 
-    def _add_tokens_to(self, _to: Address, _tokenId: int):
-        # Add token to new owner and increase token count of owner by 1
+    def _add_tokens_to(self, _to: Address, _tokenId: int, _price: int):
         self._tokenOwner[_tokenId] = _to
         self._ownedTokenCount[_to] += 1
+        self._tokenPrice[_tokenId] = _price
 
     @eventlog(indexed=3)
     def Approval(self, _owner: Address, _approved: Address, _tokenId: int):
