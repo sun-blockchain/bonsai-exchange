@@ -1,13 +1,11 @@
 body {
-    background-image: url(./images/sky-bg.png);
-    background-repeat: no-repeat;
-  
-   }
-  
+  background-image: url(./images/sky-bg.png);
+  background-repeat: no-repeat;
+}
+
 .bgc-dark {
   background-color: black;
 }
-
 
 .App {
   text-align: center;
