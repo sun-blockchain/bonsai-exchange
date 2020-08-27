@@ -1,4 +1,5 @@
 import { plants_init } from 'constant';
+import IconService from 'icon-sdk-js';
 
 export const SERVER_CONNECTED = 'SERVER_CONNECTED';
 export const serverConnected = (connected) => async (dispatch) => {

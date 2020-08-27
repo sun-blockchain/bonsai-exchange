@@ -20,7 +20,7 @@ if (argv.price) {
   price = parseInt(argv.price);
 }
 
-const tokenId = parseInt(argv.tokenid);
+const tokenName = argv.name;
 
 async function mintToken() {
   try {
@@ -36,6 +36,7 @@ async function mintToken() {
       .params({
         _to: to,
         _price: IconConverter.toHex(price),
+        _tokenName: tokenName,
       })
       .build();
 
