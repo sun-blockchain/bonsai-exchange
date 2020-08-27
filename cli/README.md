@@ -3,21 +3,21 @@
 If your address is owner of contract
 
 ```bash
-node mint.js --tokenid=
+node mint.js --name=
 ```
 
 ```bash
-node mint.js --to=
+node mint.js --to= --name=
 ```
 
 ```bash
-node mint.js --to= --price=
+node mint.js --to= --price= --name=
 ```
 
 ## Buy Bonsai
 
 ```bash
-node buyBonsai.js --amount=
+node buyBonsai.js --amount= --name=
 ```
 
 ## Transfer token

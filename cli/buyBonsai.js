@@ -17,6 +17,7 @@ const wallet = IconWallet.loadPrivateKey(process.env.PRIVATE_KEY);
 const owner = process.env.OWNER;
 const bonsaiInstance = process.env.ADDRESS_CONTRACT;
 const amount = parseInt(argv.amount);
+const tokenName = argv.name;
 
 async function buy() {
   try {
@@ -30,6 +31,9 @@ async function buy() {
       .version(IconConverter.toBigNumber('3'))
       .timestamp(new Date().getTime() * 1000)
       .method('createBonsai')
+      .params({
+        _tokenName: tokenName,
+      })
       .build();
 
     const signedTransaction = new SignedTransaction(txObj, wallet);
