@@ -4,7 +4,6 @@ import { Layout } from 'antd';
 import Top from './components/Top';
 import Bottom from './components/Bottom';
 import Middle from './components/Middle';
-
 import './App.css';
 
 const { Header, Footer, Content } = Layout;

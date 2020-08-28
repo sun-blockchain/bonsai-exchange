@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import oxyImg from 'images/oxygen_bubble_big.png';
 import * as actions from 'store/actions';
@@ -8,8 +8,8 @@ import { convertHexToDec } from 'helpers';
 import './top.css';
 
 function Top() {
-  const [balanceOxi, setBalanceOxi] = useState(null);
   const address = useSelector((state) => state.walletAddress);
+  const balanceOxy = useSelector((state) => state.balanceOxy);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,26 +26,51 @@ function Top() {
         _owner: address,
       };
       const callBuilder = new IconBuilder.CallBuilder();
-      const call = callBuilder
+      const callBalanceOxi = callBuilder
         .to(process.env.REACT_APP_ADDRESS_CONTRACT_OXI)
         .method(methodName)
         .params(params)
         .build();
-      const request = JSON.stringify({
+      const requestBalanceOxi = JSON.stringify({
         jsonrpc: '2.0',
         method: 'icx_call',
-        params: call,
+        params: callBalanceOxi,
         id: 1,
+      });
+
+      const callBalanceBonsai = callBuilder
+        .from(address)
+        .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
+        .method('getAllBonsaiOfUser')
+        .params({
+          _address: address,
+        })
+        .build();
+
+      const requestBalanceBonsai = JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'icx_call',
+        params: callBalanceBonsai,
+        id: 2,
       });
 
       window.dispatchEvent(
         new CustomEvent('ICONEX_RELAY_REQUEST', {
           detail: {
             type: 'REQUEST_JSON-RPC',
-            payload: JSON.parse(request),
+            payload: JSON.parse(requestBalanceOxi),
           },
         })
       );
+      // window.dispatchEvent(
+      //   new CustomEvent('ICONEX_RELAY_REQUEST', {
+      //     detail: {
+      //       type: 'REQUEST_JSON-RPC',
+      //       payload: JSON.parse(requestBalanceBonsai),
+      //     },
+      //   })
+      // );
+      dispatch(actions.getBalanceBonsai(address));
     }
   }, [address, dispatch]);
 
@@ -68,7 +93,11 @@ function Top() {
         break;
       case 'RESPONSE_JSON-RPC':
         if (payload.id === 1) {
-          setBalanceOxi(convertHexToDec(payload.result));
+          dispatch(actions.setBalanceOxy(convertHexToDec(payload.result)));
+        } else if (payload.id === 2) {
+          console.log('bonsai balance', payload);
+        } else if (payload.id === 3) {
+          console.log(payload);
         }
         break;
       default:
@@ -80,7 +109,7 @@ function Top() {
     <div className='oxy-area p-10px'>
       <div className='oxy-num' onClick={handleSwitchAccount}>
         <img src={oxyImg} className='oxy-img' alt='oxy' />
-        <strong className='number'>{address ? balanceOxi : 'Not connected, click here!'}</strong>
+        <strong className='number'>{address ? balanceOxy : 'Not connected, click here!'}</strong>
       </div>
     </div>
   );

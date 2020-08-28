@@ -1,7 +1,7 @@
 import * as connect from './actions';
 
 import dappConstants from 'conf/dappConstants';
-import { plants_init } from 'constant';
+import { plantsInitArray } from 'constant';
 
 const instanceId = dappConstants.INSTANCE_REG_KEY;
 
@@ -11,10 +11,13 @@ const initialState = {
   account: null,
   purses: [],
   instanceId,
-  plants: plants_init,
+  plants: plantsInitArray,
   test: [],
   walletAddress: null,
   balanceICX: null,
+  balanceOxy: null,
+  balanceBonsai: [],
+  bonsaiNumber: 0,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -63,6 +66,17 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         balanceICX: action.balanceICX,
+      };
+    case connect.SET_BALANCE_OXY:
+      return {
+        ...state,
+        balanceOxy: action.balanceOxy,
+      };
+    case connect.GET_BALANCE_BONSAI:
+      return {
+        ...state,
+        balanceBonsai: action.balanceBonsai,
+        bonsaiNumber: action.bonsaiNumber,
       };
     default:
       return state;
