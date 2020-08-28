@@ -13,6 +13,8 @@ const initialState = {
   instanceId,
   plants: plants_init,
   test: [],
+  walletAddress: null,
+  balanceICX: null,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -51,6 +53,16 @@ const rootReducer = (state = initialState, action) => {
         purses: [],
         instanceId,
         plants: [],
+      };
+    case connect.SET_ADDRESS:
+      return {
+        ...state,
+        walletAddress: action.walletAddress,
+      };
+    case connect.GET_BALANCE_ICX:
+      return {
+        ...state,
+        balanceICX: action.balanceICX,
       };
     default:
       return state;

@@ -1,5 +1,9 @@
 import { plants_init } from 'constant';
-import IconService from 'icon-sdk-js';
+import IconService, { HttpProvider } from 'icon-sdk-js';
+
+import { convertHexToDec } from 'helpers';
+const provider = new HttpProvider(process.env.REACT_APP_API_ENPOINT);
+const iconService = new IconService(provider);
 
 export const SERVER_CONNECTED = 'SERVER_CONNECTED';
 export const serverConnected = (connected) => async (dispatch) => {
@@ -51,5 +55,22 @@ export const RESET_ALL = 'RESET_ALL';
 export const resetAll = () => (dispatch) => {
   dispatch({
     type: RESET_ALL,
+  });
+};
+
+export const GET_BALANCE_ICX = 'GET_BALANCE_ICX';
+export const getBalanceICX = (address) => async (dispatch) => {
+  const balanceICX = convertHexToDec(await iconService.getBalance(address).execute());
+  dispatch({
+    type: GET_BALANCE_ICX,
+    balanceICX,
+  });
+};
+
+export const SET_ADDRESS = 'SET_ADDRESS';
+export const setAddress = (walletAddress) => (dispatch) => {
+  dispatch({
+    type: SET_ADDRESS,
+    walletAddress,
   });
 };
