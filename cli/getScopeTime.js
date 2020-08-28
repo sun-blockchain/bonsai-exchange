@@ -7,19 +7,19 @@ const iconService = new IconService(provider);
 const { CallBuilder } = IconBuilder;
 
 const owner = process.env.OWNER;
-const bonsaiInstance = process.env.ADDRESS_CONTRACT_BONSAI;
+const oxygenInstance = process.env.ADDRESS_CONTRACT_OXYGEN;
 
-async function getAllBonsaiOfToken() {
+async function getScopeTime() {
   try {
-    const txObj = new CallBuilder().from(owner).to(bonsaiInstance).method('getMyBonsais').build();
+    const txObj = new CallBuilder().from(owner).to(oxygenInstance).method('getScopeTime').build();
 
-    let result = await iconService.call(txObj).execute();
-    result = result.map((x) => parseInt(x));
-    console.log({ result });
-    return result;
+    let scopeTime = await iconService.call(txObj).execute();
+    scopeTime = parseInt(scopeTime);
+    console.log({ scopeTime });
+    return scopeTime;
   } catch (err) {
     console.log({ err });
   }
 }
 
-getAllBonsaiOfToken();
+getScopeTime();

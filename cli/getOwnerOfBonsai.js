@@ -7,7 +7,7 @@ const iconService = new IconService(provider);
 const { CallBuilder } = IconBuilder;
 
 const owner = process.env.OWNER;
-const bonsaiInstance = process.env.ADDRESS_CONTRACT;
+const bonsaiInstance = process.env.ADDRESS_CONTRACT_BONSAI;
 const tokenId = parseInt(argv.tokenid);
 
 async function getOwnerOfToken() {
