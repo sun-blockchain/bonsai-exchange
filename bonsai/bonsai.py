@@ -83,27 +83,23 @@ class BonSai(IconScoreBase, TokenStandard):
     def getLatestTokenIndex(self) -> int:
         return self._tokenIndexCount.get()
     
-    @external(readonly=True)
-    def getAllBonsaiOfUser(self, _address: Address) -> list:
+    def getListBonsai(self, _address: Address) -> list:
         bonsais = []
-        user = _address
         numberOfBonsais = self._tokenIndexCount.get()
 
         for tokenId in range(1, numberOfBonsais + 1):
-            if self._tokenOwner[tokenId] == user:
+            if self._tokenOwner[tokenId] == _address:
                 bonsais.append(tokenId)
         return bonsais
+    
+    @external(readonly=True)
+    def getAllBonsaiOfUser(self, _address: Address) -> list:
+        return self.getListBonsai(_address)
+        
 
     @external(readonly=True)
     def getMyBonsais(self) -> list:
-        bonsais = []
-        user = self.msg.sender
-        numberOfBonsais = self._tokenIndexCount.get()
-
-        for tokenId in range(1, numberOfBonsais + 1):
-            if self._tokenOwner[tokenId] == user:
-                bonsais.append(tokenId)
-        return bonsais
+        return self.getListBonsai(self.msg.sender)
 
     @external(readonly=True)
     def ownerOf(self, _tokenId: int) -> Address:
@@ -167,9 +163,9 @@ class BonSai(IconScoreBase, TokenStandard):
         _tokenId = self._tokenIndexCount.get()
         _tokenId += 1
 
-        if price <= 0 or price > 100 * 10 ** 18:
-            Logger.info(f'Price {price} out of range.', TAG)
-            revert(f'Price {price} out of range.')
+        if _price <= 0 or _price > 100 * 10 ** 18:
+            Logger.info(f'Price {_price} out of range.', TAG)
+            revert(f'Price {_price} out of range.')
         
         self._add_tokens_to(self.msg.sender, _tokenId, _price, _tokenName)
         self._tokenIndexCount.set(_tokenId)
