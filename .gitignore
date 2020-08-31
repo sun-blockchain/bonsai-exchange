@@ -6,3 +6,8 @@ tbears.log
 cli/.env
 */*.lock
 
+keystore*
+rc.log
+tbears_cli_config.json
+tbears_server_config.json
+tbears.log*

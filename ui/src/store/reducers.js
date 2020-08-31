@@ -1,16 +1,12 @@
 import * as connect from './actions';
 
-import dappConstants from 'conf/dappConstants';
 import { plantsInitArray } from 'constant';
-
-const instanceId = dappConstants.INSTANCE_REG_KEY;
 
 const initialState = {
   active: false,
   connected: false,
   account: null,
   purses: [],
-  instanceId,
   plants: plantsInitArray,
   test: [],
   walletAddress: null,
@@ -54,7 +50,6 @@ const rootReducer = (state = initialState, action) => {
         connected: false,
         account: null,
         purses: [],
-        instanceId,
         plants: [],
       };
     case connect.SET_ADDRESS:
@@ -67,7 +62,7 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         balanceICX: action.balanceICX,
       };
-    case connect.SET_BALANCE_OXY:
+    case connect.GET_BALANCE_OXY:
       return {
         ...state,
         balanceOxy: action.balanceOxy,
