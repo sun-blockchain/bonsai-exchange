@@ -1,6 +1,5 @@
-import { IconAmount } from 'icon-sdk-js';
+import { IconConverter } from 'icon-sdk-js';
 
 export const convertHexToDec = (hex_amount) => {
-  return IconAmount.of(hex_amount, IconAmount.Unit.LOOP).convertUnit(IconAmount.Unit.ICX).value
-    .c[0];
+  return IconConverter.toNumber(hex_amount);
 };

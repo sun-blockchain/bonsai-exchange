@@ -1,7 +1,7 @@
 import React from 'react';
 import testPot from 'images/pot_empty.png';
 import './Plant.css';
-import { PLANT_STATUS } from 'constant';
+import { PLANT_STATUS, plantsInitArray, plantsInitDic } from 'constant';
 import Bubbles from 'components/Animation/Bubbles';
 
 export default function Plant({ plant }) {
