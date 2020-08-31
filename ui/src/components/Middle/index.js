@@ -1,27 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import shelfImg from 'images/shelf_side_rotate.png';
 import './Middle.css';
-import { useSelector, useDispatch } from 'react-redux';
-import { PLANT_STATUS, plantsInitArray, plantsInitDic } from 'constant';
 import Plant from 'components/Plant';
+import { useSelector } from 'react-redux';
 
 function Middle() {
-  const plantNames = useSelector((state) => state.balanceBonsai);
-  const bonsaiNumber = useSelector((state) => state.bonsaiNumber);
-  const plantArray = plantsInitArray;
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   if (plantNames) {
-  //     plantNames.forEach((name) => {
-  //       if (name in plantsInitDic) {
-  //         const plant = plantsInitDic[name];
-  //         console.log(plant);
-  //         plantArray[plant.id] = plant;
-  //       }
-  //     });
-  //   }
-  // }, [bonsaiNumber, dispatch]);
+  const plants = useSelector((state) => state.plants);
 
   const rowOfPlant = (plants) => {
     return (
@@ -41,9 +25,9 @@ function Middle() {
       <div className='row' />
       <img className='shelf' src={shelfImg} alt='' />
       <div>
-        {rowOfPlant(plantArray.slice(0, 4))}
-        {rowOfPlant(plantArray.slice(4, 8))}
-        {rowOfPlant(plantArray.slice(8, 12))}
+        {rowOfPlant(plants.slice(0, 4))}
+        {rowOfPlant(plants.slice(4, 8))}
+        {rowOfPlant(plants.slice(8, 12))}
       </div>
     </div>
   );

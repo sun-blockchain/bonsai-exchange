@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Row, Button } from 'antd';
 import { PLANT_STATUS } from 'constant';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,13 +8,10 @@ import './style.css';
 
 function PlantCollection(props) {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const [plants, setPlants] = useState([]);
-
-  useEffect(() => {
-    const plantInStock = state.plants.filter((item) => item.plantStatus === PLANT_STATUS.INSTOCK);
-    setPlants(plantInStock);
-  }, [state]);
+  // const state = useSelector((state) => state);
+  const plants = useSelector((state) =>
+    state.plants.filter((item) => item.plantStatus === PLANT_STATUS.INSTOCK)
+  );
 
   const handleTakeOut = (id) => {
     dispatch(actions.changePlantStatus(id, PLANT_STATUS.PLANTED));

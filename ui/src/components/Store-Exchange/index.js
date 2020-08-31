@@ -1,22 +1,21 @@
 import React from 'react';
 import { Row } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { PLANT_STATUS } from 'constant';
 import Item from 'components/Item';
 import { buyBonsaiIcon } from 'helpers';
+import * as actions from 'store/actions';
 
 import './style.css';
 
 function Store(props) {
-  // const dispatch = useDispatch();
-
   const plants = useSelector((state) =>
     state.plants.filter((item) => item.plantStatus === PLANT_STATUS.INSTORE)
   );
+
   const address = useSelector((state) => state.walletAddress);
 
   const handleBuyPlant = (item) => {
-    // dispatch(actions.changePlantStatus(item.id, PLANT_STATUS.INSTOCK));
     buyBonsaiIcon(address, item, props);
   };
 

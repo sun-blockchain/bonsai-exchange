@@ -1,19 +1,17 @@
 import * as connect from './actions';
 
-import { plantsInitArray } from 'constant';
+import { plantsInitDic } from 'constant';
 
 const initialState = {
   active: false,
   connected: false,
   account: null,
   purses: [],
-  plants: plantsInitArray,
+  plants: [],
   test: [],
   walletAddress: null,
   balanceICX: null,
   balanceOxy: null,
-  balanceBonsai: [],
-  bonsaiNumber: 0,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -27,11 +25,6 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         active: action.active,
-      };
-    case connect.UPDATE_PURSES:
-      return {
-        ...state,
-        purses: action.purses,
       };
     case connect.UPDATE_PLANTS:
       return {
@@ -70,8 +63,7 @@ const rootReducer = (state = initialState, action) => {
     case connect.GET_BALANCE_BONSAI:
       return {
         ...state,
-        balanceBonsai: action.balanceBonsai,
-        bonsaiNumber: action.bonsaiNumber,
+        plants: action.plants,
       };
     default:
       return state;
