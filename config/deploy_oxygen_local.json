@@ -9,8 +9,8 @@
     "contentType": "zip",
     "mode": "install",
     "scoreParams": {
-      "_name": "SunCoin",
-      "_symbol": "SC",
+      "_name": "Oxygen",
+      "_symbol": "OX",
       "_decimals": "0x12",
       "_initialSupply": "0x3e8"
     }

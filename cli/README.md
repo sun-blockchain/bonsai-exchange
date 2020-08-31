@@ -1,63 +1,89 @@
-## Mint Token
+## Bonsai SCORE
+
+### Mint Token
 
 If your address is owner of contract
 
 ```bash
-node mint.js --name=
+node mintBonsai.js --name=
 ```
 
 ```bash
-node mint.js --to= --name=
+node mintBonsai.js --to= --name=
 ```
 
 ```bash
-node mint.js --to= --price= --name=
+node mintBonsai.js --to= --price= --name=
 ```
 
-## Buy Bonsai
+### Buy Bonsai
 
 ```bash
 node buyBonsai.js --amount= --name=
 ```
 
-## Transfer token
+### Transfer token
 
 ```bash
-node transfer.js --to= --tokenid=
+node transferBonsai.js --to= --tokenid=
 ```
 
-## Burn Token
+### Burn Token
 
 If your address is owner of token
 
 ```bash
-node burn.js -tokenid
+node burnBonsai.js -tokenid
 ```
 
-## Approve
+### Approve
 
 ```bash
-node approve.js --to= --tokenid=
+node approveBonsai.js --to= --tokenid=
 ```
 
-## Get Owner Of Token
+### Get Owner Of Token
 
 ```bash
-node getOwnerOfToken.js --tokenid=
+node getOwnerOfBonsai.js --tokenid=
 ```
 
-## Get Balance
+### Get Balance
 
 ```bash
-node getBalance.js
+node getBalanceBonsai.js
 ```
 
 ```bash
-node getBalance.js --address=
+node getBalanceBonsai.js --address=
 ```
 
-## Get Aprrove
+### Get Aprrove
 
 ```bash
-node getApproved.js --tokenid=
+node getApprovedBonsai.js --tokenid=
+```
+
+## Oxygen SCORE
+
+### Get Balance
+
+```bash
+node getBalanceOxygen.js --address=
+```
+
+```bash
+node getBalanceOxygen.js
+```
+
+### Transfer Oxygen
+
+```bash
+node transferOxygen.js --to= --value=
+```
+
+### Claim Oxygen
+
+```bash
+node claimOxygen.js
 ```

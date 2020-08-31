@@ -9,10 +9,12 @@
     "contentType": "tbears",
     "mode": "install",
     "scoreParams": {
-      "_name": "SunCoin",
-      "_symbol": "SC",
+      "_name": "Oxygen",
+      "_symbol": "OX",
       "_decimals": "0x12",
-      "_initialSupply": "0x3e8"
+      "_initialSupply": "0x3e8",
+      "_oxygen_receive_one_time": "0xa",
+      "_scope_time_receive_oxygen": "0xd693a400"
     }
   },
   "txresult": {},

@@ -4,12 +4,23 @@ require('dotenv').config();
 const { IconWallet, HttpProvider, SignedTransaction, IconBuilder, IconConverter } = IconService;
 const provider = new HttpProvider(process.env.API_ENPOINT);
 const iconService = new IconService(provider);
-const { CallTransactionBuilder, CallBuilder } = IconBuilder;
+const { CallTransactionBuilder } = IconBuilder;
 
 const wallet = IconWallet.loadPrivateKey(process.env.PRIVATE_KEY);
 const owner = process.env.OWNER;
 const bonsaiInstance = process.env.ADDRESS_CONTRACT_BONSAI;
-const account = argv.address;
+let to = owner;
+let price = 1;
+
+if (argv.to) {
+  to = argv.to;
+}
+
+if (argv.price) {
+  price = parseInt(argv.price);
+}
+
+const tokenName = argv.name;
 
 async function mintToken() {
   try {
@@ -23,15 +34,13 @@ async function mintToken() {
       .timestamp(new Date().getTime() * 1000)
       .method('mint')
       .params({
-        _to: owner,
-        _tokenId: IconConverter.toHex('2'),
+        _to: to,
+        _price: IconConverter.toHex(price),
+        _tokenName: tokenName,
       })
       .build();
 
-    //const result = await iconService.call(txObj).execute();
     const signedTransaction = new SignedTransaction(txObj, wallet);
-
-    /* Send transaction. It returns transaction hash. */
     const txHash = await iconService.sendTransaction(signedTransaction).execute();
 
     console.log({ txHash });
@@ -40,8 +49,4 @@ async function mintToken() {
   }
 }
 
-console.log(IconConverter.toHex(2));
-console.log(IconConverter.toHex('2'));
-
-//mintToken();
-//callScore();
+mintToken();

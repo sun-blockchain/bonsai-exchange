@@ -8,7 +8,7 @@ const { CallTransactionBuilder } = IconBuilder;
 
 const wallet = IconWallet.loadPrivateKey(process.env.PRIVATE_KEY);
 const owner = process.env.OWNER;
-const bonsaiInstance = process.env.ADDRESS_CONTRACT;
+const bonsaiInstance = process.env.ADDRESS_CONTRACT_BONSAI;
 const to = argv.to;
 const tokenId = parseInt(argv.tokenid);
 
@@ -19,7 +19,7 @@ async function transferFrom() {
       .to(bonsaiInstance)
       .stepLimit(IconConverter.toBigNumber('2000000'))
       .nid(IconConverter.toBigNumber('3'))
-      .nonce(IconConverter.toBigNumber('1'))
+      .nonce(IconConverter.toBigNumber(new Date().getTime().toString()))
       .version(IconConverter.toBigNumber('3'))
       .timestamp(new Date().getTime() * 1000)
       .method('transferFrom')

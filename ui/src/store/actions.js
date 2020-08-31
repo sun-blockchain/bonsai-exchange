@@ -133,7 +133,7 @@ export const buyBonsai = (item) => (dispatch, getState) => {
     .value(IconAmount.of(item.price, IconAmount.Unit.ICX).toLoop())
     .stepLimit(IconConverter.toBigNumber('2000000'))
     .nid(IconConverter.toBigNumber('3'))
-    .nonce(IconConverter.toBigNumber('1'))
+    .nonce(IconConverter.toBigNumber(new Date().getTime().toString()))
     .version(IconConverter.toBigNumber('3'))
     .timestamp(new Date().getTime() * 1000)
     .method('createBonsai')

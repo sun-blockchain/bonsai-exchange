@@ -2,5 +2,7 @@ keystores/*
 .score
 .statedb
 tbears.log
-cli/node_modules
+*/node_modules
 cli/.env
+*/*.lock
+

@@ -7,20 +7,28 @@ const iconService = new IconService(provider);
 const { CallBuilder } = IconBuilder;
 
 const owner = process.env.OWNER;
-const bonsaiInstance = process.env.ADDRESS_CONTRACT_BONSAI;
+const oxygenInstance = process.env.ADDRESS_CONTRACT_OXYGEN;
+let account = owner;
+
+if (argv.address) {
+  account = argv.address;
+}
 
 async function getBalance() {
   try {
     const txObj = new CallBuilder()
       .from(owner)
-      .to(bonsaiInstance)
-      .method('getLatestTokenIndex')
+      .to(oxygenInstance)
+      .method('balanceOf')
+      .params({
+        _owner: account,
+      })
       .build();
 
-    let result = await iconService.call(txObj).execute();
-    result = parseInt(result);
-    console.log({ result });
-    return result;
+    let balance = await iconService.call(txObj).execute();
+    balance = parseInt(balance);
+    console.log({ balance });
+    return balance;
   } catch (err) {
     console.log({ err });
   }
