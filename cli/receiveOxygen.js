@@ -24,7 +24,6 @@ async function receiveOxygen() {
 
     const signedTransaction = new SignedTransaction(txObj, wallet);
     const txHash = await iconService.sendTransaction(signedTransaction).execute();
-
     console.log({ txHash });
   } catch (err) {
     console.log({ err });
