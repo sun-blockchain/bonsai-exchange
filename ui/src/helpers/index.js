@@ -39,30 +39,14 @@ export const getBalanceBonsaiIcon = async (address) => {
     const txObjBonsaiId = new IconBuilder.CallBuilder()
       .from(address)
       .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
-      .method('getAllBonsaiOfUser')
+      .method('getListBonsaiName')
       .params({
         _address: address,
       })
       .build();
-    let bonsaiIds = await iconService.call(txObjBonsaiId).execute();
+    let bonsaiNames = await iconService.call(txObjBonsaiId).execute();
 
-    let balanceBonsai = [];
-
-    for (var i = 0; i < bonsaiIds.length; i++) {
-      const txObjBonsaiName = new IconBuilder.CallBuilder()
-        .from(address)
-        .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
-        .method('getNameById')
-        .params({
-          _tokenId: bonsaiIds[i],
-        })
-        .build();
-
-      const name = await iconService.call(txObjBonsaiName).execute();
-      balanceBonsai.push(name);
-    }
-
-    return balanceBonsai;
+    return bonsaiNames;
   } catch (err) {
     console.log({ err });
     // return -1 when error

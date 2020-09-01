@@ -91,6 +91,17 @@ class BonSai(IconScoreBase, TokenStandard):
             if self._tokenOwner[tokenId] == _address:
                 bonsais.append(tokenId)
         return bonsais
+
+    @external(readonly=True)
+    def getListBonsaiNameByAddress(self, _address: Address) -> list:
+        bonsais = []
+        numberOfBonsais = self._tokenIndexCount.get()
+
+        for tokenId in range(1, numberOfBonsais + 1):
+            if self._tokenOwner[tokenId] == _address:
+                # bonsais.append(tokenId)
+                bonsais.append(self._tokenName[tokenId])
+        return bonsais  
     
     @external(readonly=True)
     def getAllBonsaiOfUser(self, _address: Address) -> list:

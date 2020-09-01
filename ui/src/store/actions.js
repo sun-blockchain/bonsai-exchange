@@ -1,6 +1,5 @@
-import { plantsInitArray } from 'constant';
-
 import { convertHexToDec, getBalanceIcon, getBalanceBonsaiIcon, getBalanceOxyIcon } from 'helpers';
+import { PLANT_STATUS, plantsInitDic } from 'constant';
 
 export const SERVER_CONNECTED = 'SERVER_CONNECTED';
 export const serverConnected = (connected) => async (dispatch) => {
@@ -18,18 +17,8 @@ export const activateConnection = (active) => async (dispatch) => {
   });
 };
 
-export const UPDATE_PURSES = 'UPDATE_PURSES';
-export const updatePurses = (data) => async (dispatch) => {
-  dispatch({
-    type: UPDATE_PURSES,
-    purses: plantsInitArray,
-  });
-};
-
 export const UPDATE_PLANTS = 'UPDATE_PLANTS';
 export const updatePlants = (plants) => (dispatch) => {
-  console.log('update Plants');
-
   dispatch({
     type: UPDATE_PLANTS,
     plants,
@@ -67,7 +56,6 @@ export const getBalanceICX = (address) => async (dispatch) => {
 export const GET_BALANCE_OXY = 'GET_BALANCE_OXY';
 export const getBalanceOxy = (address) => async (dispatch) => {
   const amount = await getBalanceOxyIcon(address);
-  console.log(amount);
   dispatch({
     type: GET_BALANCE_OXY,
     balanceOxy: amount,
@@ -76,6 +64,7 @@ export const getBalanceOxy = (address) => async (dispatch) => {
 
 export const SET_ADDRESS = 'SET_ADDRESS';
 export const setAddress = (walletAddress) => (dispatch) => {
+  localStorage.setItem('address', walletAddress);
   dispatch({
     type: SET_ADDRESS,
     walletAddress,
@@ -85,11 +74,18 @@ export const setAddress = (walletAddress) => (dispatch) => {
 export const GET_BALANCE_BONSAI = 'GET_BALANCE_BONSAI';
 export const getBalanceBonsai = (address) => async (dispatch) => {
   const balanceBonsai = await getBalanceBonsaiIcon(address);
+
+  let plants = JSON.parse(JSON.stringify(plantsInitDic));
   // if not error
-  if (balanceBonsai !== -1)
-    dispatch({
-      type: GET_BALANCE_BONSAI,
-      balanceBonsai: balanceBonsai,
-      bonsaiNumber: balanceBonsai.length,
+  if (balanceBonsai.length > 0 && balanceBonsai !== -1) {
+    balanceBonsai.forEach((name) => {
+      if (name in plants) {
+        plants[name].plantStatus = PLANT_STATUS.PLANTED;
+      }
     });
+  }
+  dispatch({
+    type: GET_BALANCE_BONSAI,
+    plants: Object.values(plants),
+  });
 };

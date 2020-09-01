@@ -1,13 +1,20 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import oxyImg from 'images/oxygen_bubble_big.png';
+import { useDispatch } from 'react-redux';
+import * as actions from 'store/actions';
 
 import './top.css';
 import { ConnectWallet } from 'connectors/ConnectWallet';
 
 function Top() {
+  const dispatch = useDispatch();
   const address = useSelector((state) => state.walletAddress);
   const balanceOxy = useSelector((state) => state.balanceOxy);
+
+  if (localStorage.getItem('address')) {
+    dispatch(actions.setAddress(localStorage.getItem('address')));
+  }
 
   const handleSwitchAccount = () => {
     window.dispatchEvent(

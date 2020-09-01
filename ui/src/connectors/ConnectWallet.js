@@ -7,11 +7,6 @@ export const ConnectWallet = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.activateConnection(true));
-    dispatch(actions.updatePurses);
-  }, [dispatch]);
-
-  useEffect(() => {
     if (address) {
       dispatch(actions.getBalanceICX(address));
       dispatch(actions.getBalanceBonsai(address));
@@ -25,10 +20,13 @@ export const ConnectWallet = () => {
     switch (type) {
       case 'RESPONSE_ADDRESS':
         dispatch(actions.setAddress(payload));
+        dispatch(actions.getBalanceBonsai(payload));
         break;
       case 'RESPONSE_JSON-RPC':
         if (payload.id === 3) {
-          console.log(payload);
+          setTimeout(() => {
+            dispatch(actions.getBalanceBonsai(address));
+          }, 5000);
         }
         break;
       default:
