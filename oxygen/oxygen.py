@@ -139,10 +139,14 @@ class Oxygen(IconScoreBase, TokenStandard):
         return self._air_dropped[self.msg.sender]
     
     @external
-    def airDrop(self) -> None:
-        if self._balances[self.msg.sender] == 0 and not self._air_dropped[self.msg.sender]:
-            self._transfer(self.owner, self.msg.sender, 30, None)
-            self._air_dropped[self.msg.sender] = True
+    def airDrop(self, _address: Address) -> None:
+        if self.msg.sender != self.owner:
+            revert('{"status":403, "message":"You are not owner"}')
+        elif self._balances[_address] == 0 and not self._air_dropped[_address]:
+            self._transfer(self.owner, _address, 30, None)
+            self._air_dropped[_address] = True
+        else:
+            revert('{"status":401, "message":"This address have received the airdrop"}')
 
     @external
     def receiveOxygen(self) -> None:
