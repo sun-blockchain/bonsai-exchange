@@ -56,10 +56,10 @@ Copy the **scoreAddress** from the result
 tbears deploy bonsai -k keystores/keystore1.json -c config/depoy_bonsai_testnet.json
 ```
 
-### Deploy SunCoin Contract
+### Deploy Oxygen Contract
 
 ```bash
-tbears deploy suncoin -k keystores/keystore1.json -c config/deploy_oxygen_testnet.json
+tbears deploy oxygen -k keystores/keystore1.json -c config/deploy_oxygen_testnet.json
 ```
 
 ### Update Bonsai contract

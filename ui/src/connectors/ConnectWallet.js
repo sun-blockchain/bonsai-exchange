@@ -23,7 +23,7 @@ export const ConnectWallet = () => {
         dispatch(actions.getBalanceBonsai(payload));
         break;
       case 'RESPONSE_JSON-RPC':
-        if (payload.id === 3) {
+        if (payload.id === 1) {
           setTimeout(() => {
             dispatch(actions.getBalanceBonsai(address));
           }, 5000);

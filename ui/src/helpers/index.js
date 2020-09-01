@@ -1,4 +1,11 @@
-import IconService, { HttpProvider, IconAmount, IconConverter, IconBuilder } from 'icon-sdk-js';
+import IconService, {
+  HttpProvider,
+  IconAmount,
+  IconConverter,
+  IconBuilder,
+  IconWallet,
+  SignedTransaction,
+} from 'icon-sdk-js';
 
 const provider = new HttpProvider(process.env.REACT_APP_API_ENPOINT);
 const iconService = new IconService(provider);
@@ -90,4 +97,38 @@ export const buyBonsaiIcon = async (address, item, props) => {
   } else {
     alert('Select the ICX Address');
   }
+};
+
+// airdrop 30 oxigen for first-time users play
+export const airDropOxyIcon = async (address) => {
+  const wallet = IconWallet.loadPrivateKey(process.env.REACT_APP_PRIVATE_KEY);
+
+  try {
+    const txObj = new IconBuilder.CallTransactionBuilder()
+      .from(process.env.REACT_APP_OWNER)
+      .to(process.env.REACT_APP_ADDRESS_CONTRACT_OXI)
+      .stepLimit(IconConverter.toBigNumber('2000000'))
+      .nid(IconConverter.toBigNumber('3'))
+      .nonce(IconConverter.toBigNumber(new Date().getTime().toString()))
+      .version(IconConverter.toBigNumber('3'))
+      .timestamp(new Date().getTime() * 1000)
+      .method('airDrop')
+      .params({
+        _address: address,
+      })
+      .build();
+
+    const signedTransaction = new SignedTransaction(txObj, wallet);
+    const txHash = await iconService.sendTransaction(signedTransaction).execute();
+
+    return txHash;
+  } catch (err) {
+    console.log({ err });
+  }
+};
+
+// get transaction result success or not
+export const getTransactionResult = async (txHash) => {
+  let txObject = await iconService.getTransactionResult(txHash).execute();
+  return txObject;
 };

@@ -2,8 +2,9 @@ from iconservice import *
 
 TAG = 'Oxygen'
 
-
 # An interface of ICON Token Standard, IRC-2
+
+
 class TokenStandard:
     @abstractmethod
     def name(self) -> str:
@@ -49,6 +50,7 @@ class Oxygen(IconScoreBase, TokenStandard):
     _LAST_TIME_RECEIVE = 'last_time_receive'
     _OXYGEN_RECEIVE_ONE_TIME = 'oxygen_receive_one_time'
     _SCOPE_TIME_RECEIVE_OXYGEN = 'scope_time_receive_oxygen'
+    _AIR_DROPPED = 'air_dropped'
 
     @eventlog(indexed=3)
     def Transfer(self, _from: Address, _to: Address, _value: int, _data: bytes):
@@ -61,9 +63,13 @@ class Oxygen(IconScoreBase, TokenStandard):
         self._decimals = VarDB(self._DECIMALS, db, value_type=int)
         self._total_supply = VarDB(self._TOTAL_SUPPLY, db, value_type=int)
         self._balances = DictDB(self._BALANCES, db, value_type=int)
-        self._last_time_receive = DictDB(self._LAST_TIME_RECEIVE, db, value_type=int)
-        self._oxygen_receive_one_time = VarDB(self._OXYGEN_RECEIVE_ONE_TIME, db, value_type=int)
-        self._scope_time_receive_oxygen = VarDB(self._SCOPE_TIME_RECEIVE_OXYGEN, db, value_type=int)
+        self._last_time_receive = DictDB(
+            self._LAST_TIME_RECEIVE, db, value_type=int)
+        self._oxygen_receive_one_time = VarDB(
+            self._OXYGEN_RECEIVE_ONE_TIME, db, value_type=int)
+        self._scope_time_receive_oxygen = VarDB(
+            self._SCOPE_TIME_RECEIVE_OXYGEN, db, value_type=int)
+        self._air_dropped = DictDB(self._AIR_DROPPED, db, value_type=bool)
 
     def on_install(self, _name: str, _symbol: str, _decimals: int, _initialSupply: int, _oxygen_receive_one_time: int, _scope_time_receive_oxygen: int) -> None:
         super().on_install()
@@ -75,10 +81,10 @@ class Oxygen(IconScoreBase, TokenStandard):
             revert("Decimals cannot be less than zero")
         if _decimals > 21:
             revert("Decimals cannot be more than 21")
-        
+
         if _oxygen_receive_one_time < 0:
             revert("Oxygen receive one time cannot be less than zero")
-        
+
         if _scope_time_receive_oxygen < 0:
             revert("Time receive cannot be less than zero")
 
@@ -115,23 +121,38 @@ class Oxygen(IconScoreBase, TokenStandard):
     @external(readonly=True)
     def balanceOf(self, _owner: Address) -> int:
         return self._balances[_owner]
-    
+
     @external(readonly=True)
     def getLastTimeReceive(self) -> int:
         return self._last_time_receive[self.msg.sender]
-    
+
     @external(readonly=True)
     def getNow(self) -> int:
         return self.now()
-    
+
     @external(readonly=True)
     def getScopeTime(self) -> int:
         return self._scope_time_receive_oxygen.get()
-    
+
     @external(readonly=True)
     def getOxygenReceive(self) -> int:
         return self._oxygen_receive_one_time.get()
-    
+
+    @external(readonly=True)
+    def getAirDrop(self) -> bool:
+        return self._air_dropped[self.msg.sender]
+
+    @external
+    def airDrop(self, _address: Address) -> None:
+        if self.msg.sender != self.owner:
+            revert('{"status":403, "message":"You are not owner"}')
+        elif self._balances[_address] == 0 and not self._air_dropped[_address]:
+            self._transfer(self.owner, _address, 30, None)
+            self._air_dropped[_address] = True
+        else:
+            revert(
+                '{"status":401, "message":"This address have received the airdrop"}')
+
     @external
     def receiveOxygen(self) -> None:
         lastTimeReceive = self._last_time_receive[self.msg.sender]
@@ -140,10 +161,11 @@ class Oxygen(IconScoreBase, TokenStandard):
 
         if lastTimeReceive == 0:
             self._last_time_receive[self.msg.sender] = self.now()
-        
+            return
+
         if self.now() - lastTimeReceive < scopeTime:
             revert('Not Enough Time')
-        
+
         currentTime = self.now()
         timesReceive = (currentTime - lastTimeReceive) / scopeTime
         timesReceive = int(timesReceive)
@@ -151,7 +173,7 @@ class Oxygen(IconScoreBase, TokenStandard):
 
         self._transfer(self.owner, self.msg.sender, totalReceive, None)
         self._last_time_receive[self.msg.sender] += scopeTime
-    
+
     @external
     def transfer(self, _to: Address, _value: int, _data: bytes = None):
         if _data is None:
@@ -172,7 +194,8 @@ class Oxygen(IconScoreBase, TokenStandard):
         if _to.is_contract:
             # If the recipient is SCORE,
             #   then calls `tokenFallback` to hand over control.
-            recipient_score = self.create_interface_score(_to, TokenFallbackInterface)
+            recipient_score = self.create_interface_score(
+                _to, TokenFallbackInterface)
             recipient_score.tokenFallback(_from, _value, _data)
 
         # Emits an event log `Transfer`
