@@ -1,10 +1,9 @@
 import IconService, {
   HttpProvider,
-  IconAmount,
-  IconConverter,
-  IconBuilder,
   IconWallet,
   SignedTransaction,
+  IconConverter,
+  IconBuilder,
 } from 'icon-sdk-js';
 
 const provider = new HttpProvider(process.env.REACT_APP_API_ENPOINT);
@@ -46,7 +45,7 @@ export const getBalanceBonsaiIcon = async (address) => {
     const txObjBonsaiId = new IconBuilder.CallBuilder()
       .from(address)
       .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
-      .method('getListBonsaiName')
+      .method('getListBonsaiNameByAddress')
       .params({
         _address: address,
       })
@@ -62,27 +61,26 @@ export const getBalanceBonsaiIcon = async (address) => {
 };
 
 // buy bonsai
-export const buyBonsaiIcon = async (address, item, props) => {
+export const transferOxytoBuyBonsai = async (address, item) => {
   if (address) {
-    const txObjBuyBonsai = new IconBuilder.CallTransactionBuilder()
+    const txObj = new IconBuilder.CallTransactionBuilder()
       .from(address)
-      .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
-      .value(IconAmount.of(item.price, IconAmount.Unit.ICX).toLoop())
+      .to(process.env.REACT_APP_ADDRESS_CONTRACT_OXI)
       .stepLimit(IconConverter.toBigNumber('2000000'))
       .nid(IconConverter.toBigNumber('3'))
       .nonce(IconConverter.toBigNumber(new Date().getTime().toString()))
       .version(IconConverter.toBigNumber('3'))
       .timestamp(new Date().getTime() * 1000)
-      .method('createBonsai')
+      .method('transfer')
       .params({
-        _tokenName: item.name,
+        _to: process.env.REACT_APP_OWNER,
+        _value: IconConverter.toHex(item.price),
       })
       .build();
-
     const requestBuyBonsai = JSON.stringify({
       jsonrpc: '2.0',
       method: 'icx_sendTransaction',
-      params: IconConverter.toRawTransaction(txObjBuyBonsai),
+      params: IconConverter.toRawTransaction(txObj),
       id: 3,
     });
     window.dispatchEvent(
@@ -93,7 +91,7 @@ export const buyBonsaiIcon = async (address, item, props) => {
         },
       })
     );
-    props.onClose();
+    localStorage.setItem('BonsaiBuying', JSON.stringify(item));
   } else {
     alert('Select the ICX Address');
   }
@@ -131,4 +129,35 @@ export const airDropOxyIcon = async (address) => {
 export const getTransactionResult = async (txHash) => {
   let txObject = await iconService.getTransactionResult(txHash).execute();
   return txObject;
+};
+export const mintBonsai = async (address, item) => {
+  const wallet = IconWallet.loadPrivateKey(process.env.REACT_APP_PRIVATE_KEY);
+
+  const txObjMintBonsai = new IconBuilder.CallTransactionBuilder()
+    .from(process.env.REACT_APP_OWNER)
+    .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
+    .stepLimit(IconConverter.toBigNumber('2000000'))
+    .nid(IconConverter.toBigNumber('3'))
+    .nonce(IconConverter.toBigNumber(new Date().getTime().toString()))
+    .version(IconConverter.toBigNumber('3'))
+    .timestamp(new Date().getTime() * 1000)
+    .method('mint')
+    .params({
+      _to: address,
+      _price: IconConverter.toHex(item.price),
+      _tokenName: item.name,
+    })
+    .build();
+  const signedTransaction = new SignedTransaction(txObjMintBonsai, wallet);
+  await iconService.sendTransaction(signedTransaction).execute();
+};
+
+export const isTxSuccess = async (txHash) => {
+  setTimeout(async () => {
+    const txObject = await iconService.getTransactionResult(txHash).execute();
+    if (txObject['status'] === 1) {
+      return true;
+    }
+  }, 5000);
+  return false;
 };

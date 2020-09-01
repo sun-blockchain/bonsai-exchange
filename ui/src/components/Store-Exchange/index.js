@@ -1,10 +1,9 @@
 import React from 'react';
 import { Row } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { PLANT_STATUS } from 'constant';
 import Item from 'components/Item';
-import { buyBonsaiIcon } from 'helpers';
-import * as actions from 'store/actions';
+import { transferOxytoBuyBonsai } from 'helpers';
 
 import './style.css';
 
@@ -16,7 +15,8 @@ function Store(props) {
   const address = useSelector((state) => state.walletAddress);
 
   const handleBuyPlant = (item) => {
-    buyBonsaiIcon(address, item, props);
+    transferOxytoBuyBonsai(address, item);
+    props.onClose();
   };
 
   return (

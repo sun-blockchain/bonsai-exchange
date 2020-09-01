@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from 'store/actions';
+import { isTxSuccess, mintBonsai } from 'helpers';
 
 export const ConnectWallet = () => {
   const address = useSelector((state) => state.walletAddress);
@@ -24,8 +25,14 @@ export const ConnectWallet = () => {
         break;
       case 'RESPONSE_JSON-RPC':
         if (payload.id === 1) {
+          if (isTxSuccess(payload.result)) {
+            let bonsai = JSON.parse(localStorage.getItem('BonsaiBuying'));
+            mintBonsai(address, bonsai);
+          }
           setTimeout(() => {
+            dispatch(actions.getBalanceICX(address));
             dispatch(actions.getBalanceBonsai(address));
+            dispatch(actions.getBalanceOxy(address));
           }, 5000);
         }
         break;

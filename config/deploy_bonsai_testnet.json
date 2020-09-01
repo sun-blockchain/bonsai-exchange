@@ -2,7 +2,7 @@
   "uri": "https://bicon.net.solidwallet.io/api/v3",
   "nid": "0x3",
   "keyStore": null,
-  "from": "hx87b72278cb4358123f3945c5ac40c0f2b5c24f2d",
+  "from": "hxb156c49370e68bce7169b1fef3cc9e18e4afa720",
   "to": "cx0000000000000000000000000000000000000000",
   "stepLimit": "0x5a000000",
   "deploy": {

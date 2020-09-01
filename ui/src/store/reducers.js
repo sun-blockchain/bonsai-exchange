@@ -1,7 +1,5 @@
 import * as connect from './actions';
 
-import { plantsInitDic } from 'constant';
-
 const initialState = {
   active: false,
   connected: false,
