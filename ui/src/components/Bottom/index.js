@@ -37,11 +37,7 @@ function Bottom(props) {
         okButtonProps={{ style: { display: 'none' } }}
         onCancel={() => setOpenModalPlant(!openModalPlant)}
       >
-        <PlantCollection
-          plants={props.plants}
-          onAddPlant={props.onAddPlant}
-          onClose={() => setOpenModalPlant(!openModalPlant)}
-        />
+        <PlantCollection onClose={() => setOpenModalPlant(!openModalPlant)} />
       </Modal>
 
       <Modal
@@ -51,11 +47,7 @@ function Bottom(props) {
         okButtonProps={{ style: { display: 'none' } }}
         onCancel={() => setOpenModalStore(!openModalStore)}
       >
-        <Store
-          plants={props.plants}
-          onBuyPlant={props.onBuyPlant}
-          onClose={() => setOpenModalStore(!openModalStore)}
-        />
+        <Store onClose={() => setOpenModalStore(!openModalStore)} />
       </Modal>
     </div>
   );

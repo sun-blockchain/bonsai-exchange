@@ -25,13 +25,19 @@ async function receiveOxygen() {
       .method('receiveOxygen')
       .params({
         _to: to,
-        _countBonsai: IconConverter.toHex(bonsai),
+        _countBonsai: IconConverter.toHex(bonsai)
       })
       .build();
 
     const signedTransaction = new SignedTransaction(txObj, wallet);
     const txHash = await iconService.sendTransaction(signedTransaction).execute();
-    console.log({ txHash });
+    // console.log({ txHash });
+    setTimeout(async () => {
+      const txObject = await iconService.getTransactionResult(txHash).execute();
+      if (txObject.eventLogs[0].indexed[1]) {
+        console.log(parseInt(txObject.eventLogs[0].indexed[1]));
+      }
+    }, 5000);
   } catch (err) {
     console.log({ err });
   }

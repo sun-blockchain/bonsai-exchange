@@ -167,9 +167,7 @@ class Oxygen(IconScoreBase, TokenStandard):
             return
 
         if self.now() - lastTimeReceive < scopeTime:
-            timeRemaining = lastTimeReceive + scopeTime - self.now()
-            self.TimeRemaining(timeRemaining)
-            return
+            revert('Not enough time to receive Oxy')
 
         currentTime = self.now()
         timesReceive = (currentTime - lastTimeReceive) / scopeTime
@@ -178,8 +176,15 @@ class Oxygen(IconScoreBase, TokenStandard):
 
         self._transfer(self.owner, _to, totalReceive, None)
         self._last_time_receive[_to] += scopeTime * timesReceive
-        timeRemaining = self._last_time_receive[_to] + scopeTime - self.now()
-        self.TimeRemaining(timeRemaining)
+
+    @external(readonly=True)
+    def timeToNextReceiveOxy(self, _address: Address) -> int:
+        scopeTime = self._scope_time_receive_oxygen.get()
+        lastTimeReceive = self._last_time_receive[_address]
+        timesReceive = (self.now() - lastTimeReceive) / scopeTime
+        timesReceive = int(timesReceive)
+        timeRemaining = lastTimeReceive + scopeTime*(timesReceive+1) - self.now()
+        return timeRemaining
 
     @external
     @payable
@@ -229,10 +234,6 @@ class Oxygen(IconScoreBase, TokenStandard):
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
         Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
-    
-    @eventlog(indexed=1)
-    def TimeRemaining(self, _timeRemaining: int):
-        pass
     
     @eventlog(indexed=1)
     def AmountICX(self, _ICX: int):

@@ -1,4 +1,11 @@
-import { convertHexToDec, getBalanceIcon, getBalanceBonsaiIcon, getBalanceOxyIcon } from 'helpers';
+import {
+  receiveOxygen,
+  convertHexToDec,
+  getBalanceIcon,
+  getBalanceBonsaiIcon,
+  getBalanceOxyIcon,
+  sleep,
+} from 'helpers';
 import { PLANT_STATUS, plantsInitDic } from 'constant';
 
 export const SERVER_CONNECTED = 'SERVER_CONNECTED';
@@ -67,6 +74,9 @@ export const GET_BALANCE_BONSAI = 'GET_BALANCE_BONSAI';
 export const getBalanceBonsai = (address) => async (dispatch) => {
   const balanceBonsai = await getBalanceBonsaiIcon(address);
 
+  console.log(balanceBonsai.length);
+  await receiveOxygen(address, balanceBonsai.length);
+
   let plants = JSON.parse(JSON.stringify(plantsInitDic));
   // if not error
   if (balanceBonsai.length > 0 && balanceBonsai !== -1) {
@@ -84,7 +94,6 @@ export const getBalanceBonsai = (address) => async (dispatch) => {
 
 export const UPDATE_TOUR_STEP = 'UPDATE_TOUR_STEP';
 export const updateTourStep = (tourStep) => async (dispatch) => {
-  console.log(tourStep);
   dispatch({
     type: UPDATE_TOUR_STEP,
     tourStep,
