@@ -24,7 +24,14 @@ function Store(props) {
       {plants.length !== 0 ? (
         <Row gutter={[20, 20]} className='overflow bgc-smoke'>
           {plants.map((item) => {
-            return <Item key={item.id} onBuyPlant={() => handleBuyPlant(item)} item={item} />;
+            return (
+              <Item
+                key={item.id}
+                onBuyPlant={() => handleBuyPlant(item)}
+                item={item}
+                unit={'Oxy'}
+              />
+            );
           })}
         </Row>
       ) : (
