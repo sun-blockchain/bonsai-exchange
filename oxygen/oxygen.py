@@ -154,25 +154,53 @@ class Oxygen(IconScoreBase, TokenStandard):
                 '{"status":401, "message":"This address have received the airdrop"}')
 
     @external
-    def receiveOxygen(self) -> None:
-        lastTimeReceive = self._last_time_receive[self.msg.sender]
+    def receiveOxygen(self, _to: Address, _countBonsai: int) -> None:
+        if self.msg.sender != self.owner:
+            revert('{"status":403, "message":"You are not owner"}')
+        
+        lastTimeReceive = self._last_time_receive[_to]
         scopeTime = self._scope_time_receive_oxygen.get()
         oxygenReceive = self._oxygen_receive_one_time.get()
 
         if lastTimeReceive == 0:
-            self._last_time_receive[self.msg.sender] = self.now()
+            self._last_time_receive[_to] = self.now()
             return
 
         if self.now() - lastTimeReceive < scopeTime:
-            revert('Not Enough Time')
+            timeRemaining = lastTimeReceive + scopeTime - self.now()
+            self.TimeRemaining(timeRemaining)
+            return
 
         currentTime = self.now()
         timesReceive = (currentTime - lastTimeReceive) / scopeTime
         timesReceive = int(timesReceive)
-        totalReceive = timesReceive * oxygenReceive
+        totalReceive = timesReceive * oxygenReceive * _countBonsai
 
-        self._transfer(self.owner, self.msg.sender, totalReceive, None)
-        self._last_time_receive[self.msg.sender] += scopeTime
+        self._transfer(self.owner, _to, totalReceive, None)
+        self._last_time_receive[_to] += scopeTime * timesReceive
+        timeRemaining = self._last_time_receive[_to] + scopeTime - self.now()
+        self.TimeRemaining(timeRemaining)
+
+    @external
+    @payable
+    def buyOxygenWithICX(self):
+        amount = self.msg.value
+        if amount <= 0 or amount > 100 * 10 ** 18:
+            Logger.info(f'Price {amount} out of range.', TAG)
+            revert(f'Price {amount} out of range.')
+        
+        amountOxygen = 0
+
+        if amount == 1000000000000000000:
+            amountOxygen = 10
+        elif amount == 9000000000000000000:
+            amountOxygen = 100
+        elif amount == 80000000000000000000:
+            amountOxygen = 1000
+        
+        self.AmountICX(amount)
+        self._transfer(self.owner, self.msg.sender, amountOxygen, None)
+
 
     @external
     def transfer(self, _to: Address, _value: int, _data: bytes = None):
@@ -201,3 +229,11 @@ class Oxygen(IconScoreBase, TokenStandard):
         # Emits an event log `Transfer`
         self.Transfer(_from, _to, _value, _data)
         Logger.debug(f'Transfer({_from}, {_to}, {_value}, {_data})', TAG)
+    
+    @eventlog(indexed=1)
+    def TimeRemaining(self, _timeRemaining: int):
+        pass
+    
+    @eventlog(indexed=1)
+    def AmountICX(self, _ICX: int):
+        pass
