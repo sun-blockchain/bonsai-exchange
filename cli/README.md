@@ -87,3 +87,9 @@ node transferOxygen.js --to= --value=
 ```bash
 node claimOxygen.js
 ```
+
+### Buy Oxygen With ICX
+
+```bash
+node buyOxygenWithICX.js --value=
+```

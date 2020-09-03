@@ -53,7 +53,7 @@ Copy the **scoreAddress** from the result
 ### Deploy Bonsai Contract
 
 ```bash
-tbears deploy bonsai -k keystores/keystore1.json -c config/depoy_bonsai_testnet.json
+tbears deploy bonsai -k keystores/keystore1.json -c config/deploy_bonsai_testnet.json
 ```
 
 ### Deploy Oxygen Contract
