@@ -60,43 +60,6 @@ export const getBalanceBonsaiIcon = async (address) => {
   }
 };
 
-// buy bonsai
-export const transferOxytoBuyBonsai = async (address, item) => {
-  if (address) {
-    const txObj = new IconBuilder.CallTransactionBuilder()
-      .from(address)
-      .to(process.env.REACT_APP_ADDRESS_CONTRACT_OXI)
-      .stepLimit(IconConverter.toBigNumber('2000000'))
-      .nid(IconConverter.toBigNumber('3'))
-      .nonce(IconConverter.toBigNumber(new Date().getTime().toString()))
-      .version(IconConverter.toBigNumber('3'))
-      .timestamp(new Date().getTime() * 1000)
-      .method('transfer')
-      .params({
-        _to: process.env.REACT_APP_OWNER,
-        _value: IconConverter.toHex(item.price),
-      })
-      .build();
-    const requestBuyBonsai = JSON.stringify({
-      jsonrpc: '2.0',
-      method: 'icx_sendTransaction',
-      params: IconConverter.toRawTransaction(txObj),
-      id: 3,
-    });
-    window.dispatchEvent(
-      new CustomEvent('ICONEX_RELAY_REQUEST', {
-        detail: {
-          type: 'REQUEST_JSON-RPC',
-          payload: JSON.parse(requestBuyBonsai),
-        },
-      })
-    );
-    localStorage.setItem('BonsaiBuying', JSON.stringify(item));
-  } else {
-    alert('Select the ICX Address');
-  }
-};
-
 // airdrop 30 oxigen for first-time users play
 export const airDropOxyIcon = async (address) => {
   const wallet = IconWallet.loadPrivateKey(process.env.REACT_APP_PRIVATE_KEY);
@@ -125,11 +88,44 @@ export const airDropOxyIcon = async (address) => {
   }
 };
 
-// get transaction result success or not
-export const getTransactionResult = async (txHash) => {
-  let txObject = await iconService.getTransactionResult(txHash).execute();
-  return txObject;
+// transfer oxy to buy bonsai
+export const transferOxytoBuyBonsai = async (address, item) => {
+  if (address) {
+    const txObj = new IconBuilder.CallTransactionBuilder()
+      .from(address)
+      .to(process.env.REACT_APP_ADDRESS_CONTRACT_OXI)
+      .stepLimit(IconConverter.toBigNumber('2000000'))
+      .nid(IconConverter.toBigNumber('3'))
+      .nonce(IconConverter.toBigNumber(new Date().getTime().toString()))
+      .version(IconConverter.toBigNumber('3'))
+      .timestamp(new Date().getTime() * 1000)
+      .method('transfer')
+      .params({
+        _to: process.env.REACT_APP_OWNER,
+        _value: IconConverter.toHex(item.price),
+      })
+      .build();
+    const requestBuyBonsai = JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'icx_sendTransaction',
+      params: IconConverter.toRawTransaction(txObj),
+      id: 1,
+    });
+    window.dispatchEvent(
+      new CustomEvent('ICONEX_RELAY_REQUEST', {
+        detail: {
+          type: 'REQUEST_JSON-RPC',
+          payload: JSON.parse(requestBuyBonsai),
+        },
+      })
+    );
+    localStorage.setItem('BonsaiBuying', JSON.stringify(item));
+  } else {
+    alert('Select the ICX Address');
+  }
 };
+
+// mint bonsai after transfer oxy successfully
 export const mintBonsai = async (address, item) => {
   const wallet = IconWallet.loadPrivateKey(process.env.REACT_APP_PRIVATE_KEY);
 
@@ -152,12 +148,32 @@ export const mintBonsai = async (address, item) => {
   await iconService.sendTransaction(signedTransaction).execute();
 };
 
+// get transaction result success or not
 export const isTxSuccess = async (txHash) => {
-  setTimeout(async () => {
-    const txObject = await iconService.getTransactionResult(txHash).execute();
-    if (txObject['status'] === 1) {
-      return true;
-    }
-  }, 5000);
-  return false;
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      const txObject = await iconService.getTransactionResult(txHash).execute();
+      if (txObject['status'] === 1) {
+        resolve(true);
+      } else return resolve(false);
+    }, 4000);
+  });
+};
+
+// is newbie
+export const isNewbie = async (address) => {
+  try {
+    const txObj = new IconBuilder.CallBuilder()
+      .from(address)
+      .to(process.env.REACT_APP_ADDRESS_CONTRACT_OXI)
+      .method('getAirDrop')
+      .build();
+
+    let result = await iconService.call(txObj).execute();
+
+    if (result === '0x1') return false;
+    else return true;
+  } catch (err) {
+    console.log({ err });
+  }
 };
