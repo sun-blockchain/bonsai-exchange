@@ -10,6 +10,7 @@ const initialState = {
   walletAddress: null,
   balanceICX: null,
   balanceOxy: null,
+  tourStep: 0,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -24,24 +25,10 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         active: action.active,
       };
-    case connect.UPDATE_PLANTS:
-      return {
-        ...state,
-        plants: action.plants,
-      };
     case connect.CHANGE_PLANT_STATUS:
       return {
         ...state,
         plants: action.plants,
-      };
-    case connect.RESET_ALL:
-      return {
-        ...state,
-        active: false,
-        connected: false,
-        account: null,
-        purses: [],
-        plants: [],
       };
     case connect.SET_ADDRESS:
       return {
@@ -62,6 +49,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         plants: action.plants,
+      };
+    case connect.UPDATE_TOUR_STEP:
+      return {
+        ...state,
+        tourStep: action.tourStep,
       };
     default:
       return state;

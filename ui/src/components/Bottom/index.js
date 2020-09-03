@@ -6,10 +6,19 @@ import PlantCollection from '../PlantCollection';
 import Store from '../Store-Exchange';
 
 import './bottom.css';
+import { useDispatch } from 'react-redux';
+import * as actions from 'store/actions';
 
 function Bottom(props) {
+  const dispatch = useDispatch();
+
   const [openModalPlant, setOpenModalPlant] = useState(false);
   const [openModalStore, setOpenModalStore] = useState(false);
+
+  const handleOpen = () => {
+    setOpenModalStore(!openModalStore);
+    dispatch(actions.updateTourStep(100));
+  };
 
   return (
     <div>
@@ -17,7 +26,7 @@ function Bottom(props) {
         <Button className='plantLst bgc-w' onClick={() => setOpenModalPlant(!openModalPlant)}>
           <img src={plantImg} alt='icon' />
         </Button>
-        <Button className='bstLst bgc-w' onClick={() => setOpenModalStore(!openModalStore)}>
+        <Button className='bstLst bgc-w buy-bonsai' onClick={() => handleOpen()}>
           <img src={bstImg} alt='icon' />
         </Button>
       </div>

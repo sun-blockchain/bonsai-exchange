@@ -15,7 +15,7 @@ export const ConnectWallet = () => {
     }
   }, [address, dispatch]);
 
-  const eventHandler = (event) => {
+  const eventHandler = async (event) => {
     var type = event.detail.type;
     var payload = event.detail.payload;
     switch (type) {
@@ -25,7 +25,7 @@ export const ConnectWallet = () => {
         break;
       case 'RESPONSE_JSON-RPC':
         if (payload.id === 1) {
-          if (isTxSuccess(payload.result)) {
+          if (await isTxSuccess(payload.result)) {
             let bonsai = JSON.parse(localStorage.getItem('BonsaiBuying'));
             mintBonsai(address, bonsai);
           }

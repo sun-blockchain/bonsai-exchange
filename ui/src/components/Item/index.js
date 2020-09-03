@@ -1,10 +1,30 @@
 import { Col, Button } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import './style.css';
+import { useDispatch } from 'react-redux';
+import { updateTourStep } from 'store/actions';
 
 export default function Item(props) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (props.item.id === 0)
+      setTimeout(async () => {
+        dispatch(updateTourStep(2));
+      }, 300);
+  }, [props.item.id, dispatch]);
+
+  const handleBuy = () => {
+    dispatch(updateTourStep(100));
+    localStorage.setItem('noNeedTour', true);
+    props.onBuyPlant();
+  };
+
   return (
-    <Col className='gutter-row r-bot-10px r-top-10px' span={8}>
+    <Col
+      className={`gutter-row r-bot-10px r-top-10px ${props.item.id === 0 ? 'first-bonsai' : ''}`}
+      span={8}
+    >
       <div className='align-center'>
         <strong> {props.item.name} </strong>
       </div>
@@ -15,7 +35,7 @@ export default function Item(props) {
 
       <div>
         {/* <img src={oxyImg} className='oxy-img' alt='oxy' /> */}
-        <Button className='w-100 r-bot-10px' type='primary' onClick={props.onBuyPlant}>
+        <Button className='w-100 r-bot-10px' type='primary' onClick={() => handleBuy()}>
           <strong className=''>Buy: {props.item.price} Moola</strong>
         </Button>
       </div>

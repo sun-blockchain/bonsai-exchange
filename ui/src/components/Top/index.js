@@ -18,6 +18,9 @@ function Top() {
   }
 
   const handleSwitchAccount = () => {
+    // close tour
+    dispatch(actions.updateTourStep(100));
+
     window.dispatchEvent(
       new CustomEvent('ICONEX_RELAY_REQUEST', {
         detail: {
@@ -34,7 +37,8 @@ function Top() {
 
       {/* Airdrop 30 Oxy for first-time use per address */}
       <AirDrop />
-      <div className='oxy-num' onClick={handleSwitchAccount}>
+
+      <div className='oxy-num connect-wallet' onClick={handleSwitchAccount}>
         <img src={oxyImg} className='oxy-img' alt='oxy' />
         <strong className='number'>{address ? balanceOxy : 'Not connected, click here!'}</strong>
       </div>

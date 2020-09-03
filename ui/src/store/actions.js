@@ -17,14 +17,6 @@ export const activateConnection = (active) => async (dispatch) => {
   });
 };
 
-export const UPDATE_PLANTS = 'UPDATE_PLANTS';
-export const updatePlants = (plants) => (dispatch) => {
-  dispatch({
-    type: UPDATE_PLANTS,
-    plants,
-  });
-};
-
 export const CHANGE_PLANT_STATUS = 'CHANGE_PLANT_STATUS';
 export const changePlantStatus = (id, status) => (dispatch, getState) => {
   let state = getState();
@@ -87,5 +79,14 @@ export const getBalanceBonsai = (address) => async (dispatch) => {
   dispatch({
     type: GET_BALANCE_BONSAI,
     plants: Object.values(plants),
+  });
+};
+
+export const UPDATE_TOUR_STEP = 'UPDATE_TOUR_STEP';
+export const updateTourStep = (tourStep) => async (dispatch) => {
+  console.log(tourStep);
+  dispatch({
+    type: UPDATE_TOUR_STEP,
+    tourStep,
   });
 };
