@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import oxyImg from 'images/oxygen_bubble_big.png';
+import plusImg from 'images/plus.png';
 import { useDispatch } from 'react-redux';
 import * as actions from 'store/actions';
 import { ConnectWallet } from 'connectors/ConnectWallet';
 import AirDrop from 'components/AirDrop';
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
 import { BuyOxy } from 'components/OxyStore';
 
 import './top.css';
@@ -41,10 +42,22 @@ function Top() {
       {/* Airdrop 30 Oxy for first-time use per address */}
       <AirDrop />
 
-      <div className='oxy-num connect-wallet' onClick={handleSwitchAccount}>
-        <img src={oxyImg} className='oxy-img' alt='oxy' />
-        <strong className='number'>{address ? balanceOxy : 'Not connected, click here!'}</strong>
-        <Button onClick={() => setOpenModalBuyOxy(!openModalBuyOxy)}>+</Button>
+      <div className='oxy-num connect-wallet'>
+        {address ? <img src={oxyImg} className='oxy-img ' alt='oxy' /> : <></>}
+        <strong className='number' onClick={handleSwitchAccount}>
+          {address ? balanceOxy : 'Not connected, click here!'}
+        </strong>
+
+        {address ? (
+          <img
+            src={plusImg}
+            className='oxy-img oxi-pointer '
+            alt='plus'
+            onClick={() => setOpenModalBuyOxy(!openModalBuyOxy)}
+          />
+        ) : (
+          <></>
+        )}
       </div>
       <Modal
         title='Oxygen Store'
