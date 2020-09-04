@@ -41,6 +41,8 @@ export const ConnectWallet = () => {
       case 'RESPONSE_JSON-RPC':
         if (payload.id === 1) {
           let bonsai = JSON.parse(localStorage.getItem('BonsaiBuying'));
+          let notFisrtTour = localStorage.getItem('notFirstTour');
+          if (!notFisrtTour) localStorage.removeItem('noNeedTour');
           if (bonsai) {
             localStorage.removeItem('BonsaiBuying');
             dispatch(actions.setLoading(true));
@@ -50,6 +52,7 @@ export const ConnectWallet = () => {
               dispatch(actions.getBalanceOxy());
 
               dispatch(actions.updateTourStep(3));
+              localStorage.setItem('notFirstTour', true);
             } else {
               message.error('Transaction Has Failed !', 1.5);
             }
