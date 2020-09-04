@@ -79,12 +79,12 @@ export const getBalanceBonsai = (address) => async (dispatch) => {
   dispatch({
     type: GET_BALANCE_BONSAI,
     plants: Object.values(plants),
+    balanceBonsai,
   });
 };
 
 export const UPDATE_TOUR_STEP = 'UPDATE_TOUR_STEP';
 export const updateTourStep = (tourStep) => async (dispatch) => {
-  console.log(tourStep);
   dispatch({
     type: UPDATE_TOUR_STEP,
     tourStep,

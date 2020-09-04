@@ -2,7 +2,7 @@
   "uri": "https://bicon.net.solidwallet.io/api/v3",
   "nid": "0x3",
   "keyStore": null,
-  "from": "hx87b72278cb4358123f3945c5ac40c0f2b5c24f2d",
+  "from": "hxe7af5fcfd8dfc67530a01a0e403882687528dfcb",
   "to": "cx0000000000000000000000000000000000000000",
   "stepLimit": "0x5a000000",
   "deploy": {
@@ -13,8 +13,8 @@
       "_symbol": "OX",
       "_decimals": "0x12",
       "_initialSupply": "0x3e8",
-      "_oxygen_receive_one_time": "0xa",
-      "_scope_time_receive_oxygen": "0xd693a400"
+      "_oxygen_receive_one_time": "0x1",
+      "_scope_time_receive_oxygen": "0x989680"
     }
   },
   "txresult": {},
