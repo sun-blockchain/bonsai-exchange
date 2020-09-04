@@ -11,6 +11,7 @@ const initialState = {
   balanceICX: null,
   balanceOxy: null,
   tourStep: 0,
+  balanceBonsai: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -49,6 +50,7 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         plants: action.plants,
+        balanceBonsai: action.balanceBonsai,
       };
     case connect.UPDATE_TOUR_STEP:
       return {

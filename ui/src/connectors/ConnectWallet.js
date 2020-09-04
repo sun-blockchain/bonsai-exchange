@@ -1,19 +1,25 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from 'store/actions';
-import { isTxSuccess, mintBonsai, sleep } from 'helpers';
+import { isTxSuccess, mintBonsai, sleep, receiveOxygen } from 'helpers';
 
 export const ConnectWallet = () => {
   const address = useSelector((state) => state.walletAddress);
+  const balanceBonsai = useSelector((state) => state.balanceBonsai);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (address) {
-      dispatch(actions.getBalanceICX(address));
-      dispatch(actions.getBalanceBonsai(address));
-      dispatch(actions.getBalanceOxy(address));
+      const init = async () => {
+        dispatch(actions.getBalanceOxy(address));
+        dispatch(actions.getBalanceBonsai(address));
+        receiveOxygen(address, balanceBonsai.length);
+        await sleep(5000);
+        dispatch(actions.getBalanceOxy(address));
+      };
+      init();
     }
-  }, [address, dispatch]);
+  }, [address, dispatch, balanceBonsai.length]);
 
   const eventHandler = async (event) => {
     var type = event.detail.type;
@@ -30,8 +36,8 @@ export const ConnectWallet = () => {
           if (tx && bonsai) {
             mintBonsai(address, bonsai);
             localStorage.removeItem('BonsaiBuying');
-            dispatch(actions.getBalanceBonsai(address));
             await sleep(5000);
+            dispatch(actions.getBalanceBonsai(address));
             dispatch(actions.getBalanceOxy(address));
           }
         } else if (payload.id === 2) {

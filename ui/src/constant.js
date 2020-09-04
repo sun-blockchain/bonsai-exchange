@@ -107,19 +107,19 @@ const plantsInitDic = {
 
 const packageOxyForSale = [
   {
-    name: 'Bronze',
+    name: 'Bronze Package',
     price: 1,
     oxy: 10,
     plantImg: 'images/10oxy.png',
   },
   {
-    name: 'Silver',
+    name: 'Silver Package',
     price: 9,
     oxy: 100,
     plantImg: 'images/100oxy.png',
   },
   {
-    name: 'Gold',
+    name: 'Gold Package',
     price: 80,
     oxy: 1000,
     plantImg: 'images/1000oxy.png',

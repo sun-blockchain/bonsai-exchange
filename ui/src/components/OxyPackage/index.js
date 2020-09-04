@@ -15,7 +15,7 @@ export default function OxyPackage({ item, onBuyPlant, unit }) {
       <div>
         <Button className='w-100 r-bot-10px' type='primary' onClick={onBuyPlant}>
           <strong className=''>
-            Buy: {item.price} {unit}
+            {item.price} {unit}
           </strong>
         </Button>
       </div>

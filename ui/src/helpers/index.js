@@ -206,11 +206,7 @@ export const receiveOxygen = async (address, numBonsais) => {
       })
       .build();
     const signedTransaction = new SignedTransaction(txObj, wallet);
-    const txHash = await iconService.sendTransaction(signedTransaction).execute();
-    await sleep(5000);
-    await iconService.getTransactionResult(txHash).execute();
-
-    await getRemainingTimeReceiveOxy(address);
+    await iconService.sendTransaction(signedTransaction).execute();
   } catch (err) {
     console.log({ err });
   }
