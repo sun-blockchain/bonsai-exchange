@@ -7,6 +7,9 @@
 }
 
 .oxy-num {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
   margin: auto;
   width: 50%;
   /* height: 100%; */
@@ -23,5 +26,16 @@
 
 .number {
   padding: 0px 10px;
+  cursor: pointer;
+  margin: auto;
+  min-width: 150px;
+}
+
+.plug-button {
+  margin: 0px;
+  padding: 0px;
+}
+
+.oxi-pointer {
   cursor: pointer;
 }

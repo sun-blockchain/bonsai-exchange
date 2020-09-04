@@ -37,7 +37,7 @@ export default function Item({ item, onBuyPlant, unit }) {
         {/* <img src={oxyImg} className='oxy-img' alt='oxy' /> */}
         <Button className='w-100 r-bot-10px' type='primary' onClick={() => handleBuy()}>
           <strong className=''>
-            Buy: {item.price} {unit}
+            {item.price} {unit}
           </strong>
         </Button>
       </div>
