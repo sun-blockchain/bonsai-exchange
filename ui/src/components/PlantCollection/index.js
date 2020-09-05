@@ -6,7 +6,7 @@ import * as actions from 'store/actions';
 
 import './style.css';
 
-function PlantCollection(props) {
+function PlantCollection({ onClose }) {
   const dispatch = useDispatch();
   // const state = useSelector((state) => state);
   const plants = useSelector((state) =>
@@ -15,7 +15,7 @@ function PlantCollection(props) {
 
   const handleTakeOut = (id) => {
     dispatch(actions.changePlantStatus(id, PLANT_STATUS.PLANTED));
-    props.onClose();
+    onClose();
   };
 
   if (plants.length === 0) {
@@ -29,9 +29,9 @@ function PlantCollection(props) {
   } else {
     return (
       <div className='collection'>
-        {plants.map((item) => {
+        {plants.map((item, index) => {
           return (
-            <Row key={item.id} className='bgc-w item'>
+            <Row key={index} className='bgc-w item'>
               <div className='plantAva bgc-blue'>
                 <img src={item.plantImg} className='plantImg' alt='' />
               </div>

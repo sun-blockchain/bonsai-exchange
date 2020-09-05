@@ -9,7 +9,7 @@ import './bottom.css';
 import { useDispatch } from 'react-redux';
 import * as actions from 'store/actions';
 
-function Bottom(props) {
+function Bottom() {
   const dispatch = useDispatch();
 
   const [openModalPlant, setOpenModalPlant] = useState(false);

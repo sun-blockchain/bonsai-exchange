@@ -66,13 +66,13 @@ export const setAddress = (walletAddress) => (dispatch) => {
 export const GET_BALANCE_BONSAI = 'GET_BALANCE_BONSAI';
 export const getBalanceBonsai = (address) => async (dispatch) => {
   const balanceBonsai = await getBalanceBonsaiIcon(address);
-
   let plants = JSON.parse(JSON.stringify(plantsInitDic));
   // if not error
-  if (balanceBonsai.length > 0 && balanceBonsai !== -1) {
-    balanceBonsai.forEach((name) => {
+  if (balanceBonsai && balanceBonsai !== -1) {
+    balanceBonsai[0].forEach((name, id) => {
       if (name in plants) {
         plants[name].plantStatus = PLANT_STATUS.PLANTED;
+        plants[name].id = balanceBonsai[1][id];
       }
     });
   }
