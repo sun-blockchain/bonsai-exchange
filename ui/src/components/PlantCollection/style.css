@@ -13,23 +13,21 @@
   color: green;
 }
 
-.bgc-green {
-  background-color: green;
-}
-
 .blue {
   color: blue;
 }
 
-.plantAva {
+.plant-ava {
   width: 70px;
   height: 70px;
   position: relative;
   margin-right: 10px;
+  display: flex;
+  justify-content: center;
 }
 
-.plantAva > .plantImg {
-  width: 100%;
+.plant-ava > .plantImg {
+  width: 46px;
   max-height: 90%;
   position: absolute;
   bottom: 0px;
@@ -49,9 +47,13 @@
   border-radius: 5px;
 }
 
-.item > button {
+.item > .colection-button {
   position: absolute;
   right: 0px;
   /* width: 60px; */
   margin: 15px 15px;
+}
+
+.margin-left {
+  margin-left: 10px;
 }

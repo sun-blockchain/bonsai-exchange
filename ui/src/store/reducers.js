@@ -12,6 +12,7 @@ const initialState = {
   balanceOxy: null,
   tourStep: 0,
   balanceBonsai: [],
+  firstPlant: null, // for trigger transfer plant posotion
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -56,6 +57,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         tourStep: action.tourStep,
+      };
+    case connect.SET_FIRST_PLANT:
+      return {
+        ...state,
+        firstPlant: action.firstPlant,
       };
     default:
       return state;
