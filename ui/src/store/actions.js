@@ -1,4 +1,11 @@
-import { convertHexToDec, getBalanceIcon, getBalanceBonsaiIcon, getBalanceOxyIcon } from 'helpers';
+import {
+  convertHexToDec,
+  getBalanceIcon,
+  getBalanceBonsaiIcon,
+  getBalanceOxyIcon,
+  mintBonsaiFrom,
+  sleep
+} from 'helpers';
 import { PLANT_STATUS, plantsInitDic } from 'constant';
 
 export const SERVER_CONNECTED = 'SERVER_CONNECTED';
@@ -46,7 +53,10 @@ export const getBalanceICX = (address) => async (dispatch) => {
 };
 
 export const GET_BALANCE_OXY = 'GET_BALANCE_OXY';
-export const getBalanceOxy = (address) => async (dispatch) => {
+export const getBalanceOxy = () => async (dispatch, getState) => {
+  let state = getState();
+
+  let address = state.walletAddress;
   const amount = await getBalanceOxyIcon(address);
   dispatch({
     type: GET_BALANCE_OXY,
@@ -64,15 +74,18 @@ export const setAddress = (walletAddress) => (dispatch) => {
 };
 
 export const GET_BALANCE_BONSAI = 'GET_BALANCE_BONSAI';
-export const getBalanceBonsai = (address) => async (dispatch) => {
+export const getBalanceBonsai = () => async (dispatch, getState) => {
+  let state = getState();
+
+  let address = state.walletAddress;
   const balanceBonsai = await getBalanceBonsaiIcon(address);
   let plants = JSON.parse(JSON.stringify(plantsInitDic));
   // if not error
   if (balanceBonsai && balanceBonsai !== -1) {
-    balanceBonsai[0].forEach((name, id) => {
+    balanceBonsai[0].forEach((name, index) => {
       if (name in plants) {
         plants[name].plantStatus = PLANT_STATUS.PLANTED;
-        plants[name].id = balanceBonsai[1][id];
+        plants[name].id = balanceBonsai[1][index];
       }
     });
   }
@@ -83,7 +96,7 @@ export const getBalanceBonsai = (address) => async (dispatch) => {
   dispatch({
     type: GET_BALANCE_BONSAI,
     plants,
-    balanceBonsai,
+    balanceBonsai: balanceBonsai[0],
   });
 };
 
@@ -120,5 +133,34 @@ export const transferPlantLocation = (secondPlant) => async (dispatch, getState)
   dispatch({
     type: CHANGE_PLANT_STATUS,
     plants,
+  });
+};
+
+export const mintBonsai = (bonsai) => async (dispatch, getState) => {
+  let state = getState();
+  let address = state.walletAddress;
+
+  mintBonsaiFrom(address, bonsai);
+  await sleep(5000);
+
+  const balanceBonsai = await getBalanceBonsaiIcon(address);
+  let plants = JSON.parse(JSON.stringify(plantsInitDic));
+  // if not error
+  if (balanceBonsai && balanceBonsai !== -1) {
+    balanceBonsai[0].forEach((name, index) => {
+      if (name in plants) {
+        plants[name].plantStatus = PLANT_STATUS.PLANTED;
+        plants[name].id = balanceBonsai[1][index];
+      }
+    });
+  }
+
+  plants = Object.values(plants);
+  plants.map((plant, index) => (plant.index = index));
+
+  dispatch({
+    type: GET_BALANCE_BONSAI,
+    plants,
+    balanceBonsai: balanceBonsai[0],
   });
 };

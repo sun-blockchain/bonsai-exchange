@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from 'store/actions';
-import { isTxSuccess, mintBonsai, sleep, receiveOxygen } from 'helpers';
+import { isTxSuccess, sleep, receiveOxygen } from 'helpers';
 
 export const ConnectWallet = () => {
   const address = useSelector((state) => state.walletAddress);
@@ -10,8 +10,8 @@ export const ConnectWallet = () => {
 
   useEffect(() => {
     if (address) {
-      dispatch(actions.getBalanceOxy(address));
-      dispatch(actions.getBalanceBonsai(address));
+      dispatch(actions.getBalanceOxy());
+      dispatch(actions.getBalanceBonsai());
     }
   }, [address, dispatch]);
 
@@ -20,7 +20,7 @@ export const ConnectWallet = () => {
       const init = async () => {
         receiveOxygen(address, numBonsai);
         await sleep(5000);
-        await dispatch(actions.getBalanceOxy(address));
+        await dispatch(actions.getBalanceOxy());
       };
       init();
     }
@@ -29,6 +29,7 @@ export const ConnectWallet = () => {
   const eventHandler = async (event) => {
     var type = event.detail.type;
     var payload = event.detail.payload;
+
     switch (type) {
       case 'RESPONSE_ADDRESS':
         dispatch(actions.setAddress(payload));
@@ -39,15 +40,22 @@ export const ConnectWallet = () => {
 
           let bonsai = JSON.parse(localStorage.getItem('BonsaiBuying'));
           if (tx && bonsai) {
-            mintBonsai(address, bonsai);
             localStorage.removeItem('BonsaiBuying');
-            await sleep(5000);
-            dispatch(actions.getBalanceBonsai(address));
-            dispatch(actions.getBalanceOxy(address));
+            dispatch(actions.mintBonsai(bonsai));
+            dispatch(actions.getBalanceOxy());
           }
         } else if (payload.id === 2) {
-          await sleep(5000);
-          dispatch(actions.getBalanceOxy(address));
+          if (JSON.parse(localStorage.getItem('buyOxy'))) {
+            localStorage.removeItem('buyOxy');
+            await sleep(5000);
+            dispatch(actions.getBalanceOxy());
+          }
+        } else if (payload.id === 3) {
+          if (JSON.parse(localStorage.getItem('transferBonsai'))) {
+            localStorage.removeItem('transferBonsai');
+            await sleep(5000);
+            dispatch(actions.getBalanceBonsai());
+          }
         }
         break;
       default:

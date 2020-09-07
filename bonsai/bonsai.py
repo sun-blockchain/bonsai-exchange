@@ -160,12 +160,13 @@ class BonSai(IconScoreBase, TokenStandard):
             revert("You can't transfer to a zero address")
 
         _price = self._tokenPrice[_tokenId]
+        _name = self._tokenName[_tokenId]
 
         self._clear_approval(_tokenId)
         self._remove_tokens_from(_from, _tokenId)
-        self._add_tokens_to(_to, _tokenId, _price)
-        self.Transfer(_from, _to, _tokenId)
-        Logger.debug(f'Transfer({_from}, {_to}, {_tokenId}, TAG)')
+        self._add_tokens_to(_to, _tokenId, _price, _name)
+        self.Transfer(_from, _to, _tokenId, _price, _name)
+        Logger.debug(f'Transfer({_from}, {_to}, {_tokenId}, {_price}, {_name} TAG)')
 
     @external
     @payable

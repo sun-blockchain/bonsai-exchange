@@ -145,7 +145,7 @@ export const transferOxytoBuyBonsai = async (address, item) => {
 };
 
 // mint bonsai after transfer oxy successfully
-export const mintBonsai = async (address, item) => {
+export const mintBonsaiFrom = async (address, item) => {
   try {
     const txObjMintBonsai = new IconBuilder.CallTransactionBuilder()
       .from(process.env.REACT_APP_OWNER)
@@ -276,7 +276,44 @@ export const buyOxygenWithICX = async (address, numOxy) => {
         },
       })
     );
+    localStorage.setItem('buyOxy', true);
   } catch (err) {
     console.log({ err });
+  }
+};
+
+export const transferBonsai = (from, to, bonsaiId) => {
+  try {
+    const txObj = new IconBuilder.CallTransactionBuilder()
+      .from(from)
+      .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
+      .stepLimit(IconConverter.toBigNumber('2000000'))
+      .nid(IconConverter.toBigNumber('3'))
+      .nonce(IconConverter.toBigNumber(new Date().getTime().toString()))
+      .version(IconConverter.toBigNumber('3'))
+      .timestamp(new Date().getTime() * 1000)
+      .method('transfer')
+      .params({
+        _to: to,
+        _tokenId: bonsaiId,
+      })
+      .build();
+    const requestTransferBonsai = JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'icx_sendTransaction',
+      params: IconConverter.toRawTransaction(txObj),
+      id: 3,
+    });
+    window.dispatchEvent(
+      new CustomEvent('ICONEX_RELAY_REQUEST', {
+        detail: {
+          type: 'REQUEST_JSON-RPC',
+          payload: JSON.parse(requestTransferBonsai),
+        },
+      })
+    );
+    localStorage.setItem('transferBonsai', true);
+  } catch (error) {
+    console.log({ error });
   }
 };
