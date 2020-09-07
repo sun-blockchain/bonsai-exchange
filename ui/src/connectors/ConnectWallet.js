@@ -5,21 +5,26 @@ import { isTxSuccess, mintBonsai, sleep, receiveOxygen } from 'helpers';
 
 export const ConnectWallet = () => {
   const address = useSelector((state) => state.walletAddress);
-  const balanceBonsai = useSelector((state) => state.balanceBonsai);
+  const numBonsai = useSelector((state) => state.balanceBonsai.length);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (address) {
+      dispatch(actions.getBalanceOxy(address));
+      dispatch(actions.getBalanceBonsai(address));
+    }
+  }, [address, dispatch]);
+
+  useEffect(() => {
+    if (address && numBonsai > 0) {
       const init = async () => {
-        dispatch(actions.getBalanceOxy(address));
-        dispatch(actions.getBalanceBonsai(address));
-        receiveOxygen(address, balanceBonsai.length);
+        receiveOxygen(address, numBonsai);
         await sleep(5000);
-        dispatch(actions.getBalanceOxy(address));
+        await dispatch(actions.getBalanceOxy(address));
       };
       init();
     }
-  }, [address, dispatch, balanceBonsai.length]);
+  }, [address, dispatch, numBonsai]);
 
   const eventHandler = async (event) => {
     var type = event.detail.type;

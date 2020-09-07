@@ -48,7 +48,7 @@ export const getBalanceOxyIcon = async (address) => {
 // get balance erc-721
 export const getBalanceBonsaiIcon = async (address) => {
   try {
-    const txObjBonsaiId = new IconBuilder.CallBuilder()
+    const txObjBonsaiNames = new IconBuilder.CallBuilder()
       .from(address)
       .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
       .method('getListBonsaiNameByAddress')
@@ -56,9 +56,18 @@ export const getBalanceBonsaiIcon = async (address) => {
         _address: address,
       })
       .build();
-    let bonsaiNames = await iconService.call(txObjBonsaiId).execute();
 
-    return bonsaiNames;
+    const txObjBonsaiIds = new IconBuilder.CallBuilder()
+      .from(address)
+      .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
+      .method('getAllBonsaiOfUser')
+      .params({
+        _address: address,
+      })
+      .build();
+    let bonsaiNames = iconService.call(txObjBonsaiNames).execute();
+    let bonsaiIds = iconService.call(txObjBonsaiIds).execute();
+    return await Promise.all([bonsaiNames, bonsaiIds]);
   } catch (err) {
     console.log({ err });
     // return -1 when error

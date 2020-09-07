@@ -8,7 +8,7 @@ Object.freeze(PLANT_STATUS);
 
 const plantsInitDic = {
   'Bonsai 0': {
-    id: 0,
+    id: null,
     name: 'Bonsai 0',
     level: 2,
     price: 30,
@@ -16,7 +16,7 @@ const plantsInitDic = {
     plantImg: 'images/chamomile4_background.png',
   },
   'Bonsai 1': {
-    id: 1,
+    id: null,
     name: 'Bonsai 1',
     level: 2,
     price: 56,
@@ -24,7 +24,7 @@ const plantsInitDic = {
     plantImg: '/images/cherryblossombonsai2_background.png',
   },
   'Bonsai 2': {
-    id: 2,
+    id: null,
     name: 'Bonsai 2',
     level: 3,
     price: 40,
@@ -32,7 +32,7 @@ const plantsInitDic = {
     plantImg: '/images/chineselantern2_background.png',
   },
   'Bonsai 3': {
-    id: 3,
+    id: null,
     name: 'Bonsai 3',
     level: 2,
     price: 30,
@@ -40,7 +40,7 @@ const plantsInitDic = {
     plantImg: '/images/crocus3_background.png',
   },
   'Bonsai 4': {
-    id: 4,
+    id: null,
     name: 'Bonsai 4',
     level: 2,
     price: 30,
@@ -48,7 +48,7 @@ const plantsInitDic = {
     plantImg: '/images/daffodils3_background.png',
   },
   'Bonsai 5': {
-    id: 5,
+    id: null,
     name: 'Bonsai 5',
     level: 2,
     price: 30,
@@ -56,7 +56,7 @@ const plantsInitDic = {
     plantImg: '/images/dwarfjadeplant2_background.png',
   },
   'Bonsai 6': {
-    id: 6,
+    id: null,
     name: 'Bonsai 6',
     level: 2,
     price: 30,
@@ -64,7 +64,7 @@ const plantsInitDic = {
     plantImg: '/images/dwarfpapyrus4_background.png',
   },
   'Bonsai 7': {
-    id: 7,
+    id: null,
     name: 'Bonsai 7',
     level: 2,
     price: 30,
@@ -72,7 +72,7 @@ const plantsInitDic = {
     plantImg: '/images/easterlilycactus4_background.png',
   },
   'Bonsai 8': {
-    id: 8,
+    id: null,
     name: 'Bonsai 8',
     level: 2,
     price: 56,
@@ -80,7 +80,7 @@ const plantsInitDic = {
     plantImg: '/images/flamingoflower4_background.png',
   },
   'Bonsai 9': {
-    id: 9,
+    id: null,
     name: 'Bonsai 9',
     level: 3,
     price: 40,
@@ -88,7 +88,7 @@ const plantsInitDic = {
     plantImg: '/images/flamingoflower4_background.png',
   },
   'Bonsai 10': {
-    id: 10,
+    id: null,
     name: 'Bonsai 10',
     level: 2,
     price: 30,
@@ -96,7 +96,7 @@ const plantsInitDic = {
     plantImg: '/images/freesia4_background.png',
   },
   'Bonsai 11': {
-    id: 11,
+    id: null,
     name: 'Bonsai 11',
     level: 2,
     price: 30,
