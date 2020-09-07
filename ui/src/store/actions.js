@@ -76,17 +76,49 @@ export const getBalanceBonsai = (address) => async (dispatch) => {
       }
     });
   }
+
+  plants = Object.values(plants);
+  plants.map((plant, index) => (plant.index = index));
+
   dispatch({
     type: GET_BALANCE_BONSAI,
-    plants: Object.values(plants),
+    plants,
     balanceBonsai,
   });
 };
 
 export const UPDATE_TOUR_STEP = 'UPDATE_TOUR_STEP';
-export const updateTourStep = (tourStep) => async (dispatch) => {
+export const updateTourStep = (tourStep) => (dispatch) => {
   dispatch({
     type: UPDATE_TOUR_STEP,
     tourStep,
+  });
+};
+
+export const SET_FIRST_PLANT = 'SET_FIRST_PLANT';
+export const setFirstPlant = (firstPlant) => (dispatch) => {
+  dispatch({
+    type: SET_FIRST_PLANT,
+    firstPlant,
+  });
+};
+
+export const transferPlantLocation = (secondPlant) => async (dispatch, getState) => {
+  let state = getState();
+
+  let firstPlant = state.firstPlant;
+  let plants = state.plants;
+
+  // transfer
+  let temp = plants[firstPlant];
+  plants[firstPlant] = plants[secondPlant];
+  plants[secondPlant] = temp;
+
+  // update index
+  plants.map((plant, index) => (plant.index = index));
+
+  dispatch({
+    type: CHANGE_PLANT_STATUS,
+    plants,
   });
 };
