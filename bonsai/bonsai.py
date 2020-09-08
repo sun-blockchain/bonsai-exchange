@@ -43,6 +43,7 @@ class BonSai(IconScoreBase, TokenStandard):
     _TOKEN_APPROVALS = 'token_approvals'  # Track token approved owner against token ID
     _TOKEN_PRICE = 'token_price'
     _TOKEN_NAME = 'token_name'
+    _PLANT_DICT = 'plant_dict'
 
     _ZERO_ADDRESS = Address.from_prefix_and_int(AddressPrefix.EOA, 0)
 
@@ -54,9 +55,12 @@ class BonSai(IconScoreBase, TokenStandard):
         self._tokenApprovals = DictDB(self._TOKEN_APPROVALS, db, value_type=Address)
         self._tokenPrice = DictDB(self._TOKEN_PRICE, db, value_type=int)
         self._tokenName = DictDB(self._TOKEN_NAME, db, value_type=str)
+        self._plantDict= VarDB(self._PLANT_DICT, db, value_type=str)
 
     def on_install(self) -> None:
         super().on_install()
+        plantDict = '{"Bonsai 0":{"id":null,"name":"Chamomile","level":2,"price":30,"plantStatus":3,"plantImg":"images/chamomile5_background.png"},"Bonsai 1":{"id":null,"name":"Cherry Blossom","level":2,"price":56,"plantStatus":3,"plantImg":"/images/cherryblossombonsai4_background.png"},"Bonsai 2":{"id":null,"name":"Chinese Lantern","level":3,"price":40,"plantStatus":3,"plantImg":"/images/chineselantern4_background.png"},"Bonsai 3":{"id":null,"name":"Japan Maple","level":2,"price":30,"plantStatus":3,"plantImg":"/images/japanesemaplebonsai5_background.png"},"Bonsai 4":{"id":null,"name":"Bell Pepper","level":2,"price":30,"plantStatus":3,"plantImg":"/images/bellpeppers5_background.png"},"Bonsai 5":{"id":null,"name":"Forget Menot","level":2,"price":30,"plantStatus":3,"plantImg":"/images/forgetmenot5_background.png"},"Bonsai 6":{"id":null,"name":"Peony","level":2,"price":30,"plantStatus":3,"plantImg":"/images/peonies5_background.png"},"Bonsai 7":{"id":null,"name":"Crocus","level":2,"price":30,"plantStatus":3,"plantImg":"/images/crocus4_background.png"},"Bonsai 8":{"id":null,"name":"Flamingo","level":2,"price":56,"plantStatus":3,"plantImg":"/images/flamingoflower5_background.png"},"Bonsai 9":{"id":null,"name":"Carnation","level":3,"price":40,"plantStatus":3,"plantImg":"/images/carnation5_background.png"},"Bonsai 10":{"id":null,"name":"Lily","level":2,"price":30,"plantStatus":3,"plantImg":"/images/lilyoftheincas5_background.png"},"Bonsai 11":{"id":null,"name":"Amaryllis","level":2,"price":30,"plantStatus":3,"plantImg":"images/amaryllis5_background.png"}}'
+        self._plantDict.set(plantDict)
 
     def on_update(self) -> None:
         super().on_update()
@@ -82,6 +86,16 @@ class BonSai(IconScoreBase, TokenStandard):
     @external(readonly=True)
     def getLatestTokenIndex(self) -> int:
         return self._tokenIndexCount.get()
+    
+    @external(readonly=True)
+    def getPlantDict(self) -> str:
+        return self._plantDict.get()
+    
+    @external
+    def setPlantDict(self, _plants: str) -> str:
+        if self.msg.owner != self.owner:
+            revert("Permission Denied")
+        self._plantDict.set(_plants)
     
     def getListBonsai(self, _address: Address) -> list:
         bonsais = []
