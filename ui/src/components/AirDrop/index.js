@@ -46,7 +46,7 @@ export default function AirDrop() {
         <div className='ant-modal-confirm-body'>
           <CheckCircleTwoTone twoToneColor='#52c41a' />
           <div className='ant-modal-confirm-content'>
-            You have been given 30 Oxygen to start the game !!!
+            You have been given 3000 Oxygen to start the game !!!
           </div>
         </div>
       </Modal>
