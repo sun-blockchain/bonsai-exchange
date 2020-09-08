@@ -1,6 +1,6 @@
 import React from 'react';
-
-import { Layout } from 'antd';
+import { useSelector } from 'react-redux';
+import { Layout, Spin } from 'antd';
 import Top from './components/Top';
 import Bottom from './components/Bottom';
 import Middle from './components/Middle';
@@ -11,6 +11,7 @@ import './App.css';
 const { Header, Footer, Content } = Layout;
 
 function App() {
+  const loading = useSelector((state) => state.loading);
   return (
     <Layout className='App bg'>
       {/* UI */}
@@ -18,6 +19,7 @@ function App() {
       {/* Tour tutorial for fisrt user */}
       {localStorage.getItem('noNeedTour') ? <></> : <TourNewbie />}
 
+      <Spin spinning={loading} size='large' tip='Loading...'></Spin>
       <Header className='bgc-w h-50px p-10px r-bot-10px'>
         <Top />
       </Header>

@@ -92,3 +92,13 @@ body {
 .bgc-smoke {
   background-color: whitesmoke;
 }
+
+.ant-spin-spinning {
+  position: fixed !important;
+  width: 500px;
+  z-index: 100000;
+  height: 780px;
+  background-color: aliceblue;
+  padding-top: 20% !important;
+  opacity: 0.4 !important;
+}

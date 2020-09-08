@@ -36,25 +36,31 @@ export const ConnectWallet = () => {
         break;
       case 'RESPONSE_JSON-RPC':
         if (payload.id === 1) {
+          dispatch(actions.setLoading(true));
           const tx = await isTxSuccess(payload.result);
 
           let bonsai = JSON.parse(localStorage.getItem('BonsaiBuying'));
           if (tx && bonsai) {
             localStorage.removeItem('BonsaiBuying');
-            dispatch(actions.mintBonsai(bonsai));
+            await dispatch(actions.mintBonsai(bonsai));
             dispatch(actions.getBalanceOxy());
+            dispatch(actions.setLoading(false));
           }
         } else if (payload.id === 2) {
+          dispatch(actions.setLoading(true));
           if (JSON.parse(localStorage.getItem('buyOxy'))) {
             localStorage.removeItem('buyOxy');
             await sleep(5000);
             dispatch(actions.getBalanceOxy());
+            dispatch(actions.setLoading(false));
           }
         } else if (payload.id === 3) {
+          dispatch(actions.setLoading(true));
           if (JSON.parse(localStorage.getItem('transferBonsai'))) {
             localStorage.removeItem('transferBonsai');
             await sleep(5000);
             dispatch(actions.getBalanceBonsai());
+            dispatch(actions.setLoading(false));
           }
         }
         break;
