@@ -196,12 +196,12 @@ class Oxygen(IconScoreBase, TokenStandard):
         
         amountOxygen = 0
 
-        if amount == 1000000000000000000:
-            amountOxygen = 10
-        elif amount == 9000000000000000000:
-            amountOxygen = 100
-        elif amount == 80000000000000000000:
+        if amount == 100000000000000000000:
             amountOxygen = 1000
+        elif amount == 900000000000000000000:
+            amountOxygen = 10000
+        elif amount == 8000000000000000000000:
+            amountOxygen = 100000
         
         self.AmountICX(amount)
         self._transfer(self.owner, self.msg.sender, amountOxygen, None)
