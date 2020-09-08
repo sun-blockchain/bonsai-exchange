@@ -2,6 +2,7 @@ from iconservice import *
 
 TAG = 'BonSai'
 
+
 class TokenStandard:
     @abstractmethod
     def name(self) -> str:
@@ -37,10 +38,12 @@ class TokenStandard:
 
 
 class BonSai(IconScoreBase, TokenStandard):
-    _OWNED_TOKEN_COUNT = 'owned_token_count'  # Track token count against token owners
-    _TOKEN_INDEX_COUNT = 'token_index_count'  # increment 
+    # Track token count against token owners
+    _OWNED_TOKEN_COUNT = 'owned_token_count'
+    _TOKEN_INDEX_COUNT = 'token_index_count'  # increment
     _TOKEN_OWNER = 'token_owner'  # Track token owner against token ID
-    _TOKEN_APPROVALS = 'token_approvals'  # Track token approved owner against token ID
+    # Track token approved owner against token ID
+    _TOKEN_APPROVALS = 'token_approvals'
     _TOKEN_PRICE = 'token_price'
     _TOKEN_NAME = 'token_name'
     _PLANT_DICT = 'plant_dict'
@@ -49,18 +52,19 @@ class BonSai(IconScoreBase, TokenStandard):
 
     def __init__(self, db: IconScoreDatabase) -> None:
         super().__init__(db)
-        self._ownedTokenCount = DictDB(self._OWNED_TOKEN_COUNT, db, value_type=int)
-        self._tokenIndexCount = VarDB(self._TOKEN_INDEX_COUNT, db, value_type=int)
+        self._ownedTokenCount = DictDB(
+            self._OWNED_TOKEN_COUNT, db, value_type=int)
+        self._tokenIndexCount = VarDB(
+            self._TOKEN_INDEX_COUNT, db, value_type=int)
         self._tokenOwner = DictDB(self._TOKEN_OWNER, db, value_type=Address)
-        self._tokenApprovals = DictDB(self._TOKEN_APPROVALS, db, value_type=Address)
+        self._tokenApprovals = DictDB(
+            self._TOKEN_APPROVALS, db, value_type=Address)
         self._tokenPrice = DictDB(self._TOKEN_PRICE, db, value_type=int)
         self._tokenName = DictDB(self._TOKEN_NAME, db, value_type=str)
-        self._plantDict= DictDB(self._PLANT_DICT, db, value_type=str)
+        self._plantDict = DictDB(self._PLANT_DICT, db, value_type=str)
 
     def on_install(self) -> None:
         super().on_install()
-        plantDict = '{"Flamingo":{"id":null,"name":"Flamingo","level":2,"price":3000,"plantStatus":3,"plantImg":"/images/flamingoflower5_background.png"},"Forget Menot":{"id":null,"name":"Forget Menot","level":2,"price":3000,"plantStatus":3,"plantImg":"/images/forgetmenot5_background.png"},"Lily":{"id":null,"name":"Lily","level":2,"price":3049,"plantStatus":3,"plantImg":"/images/lilyoftheincas5_background.png"},"Crocus":{"id":null,"name":"Crocus","level":2,"price":3099,"plantStatus":3,"plantImg":"/images/crocus4_background.png"},"Peony":{"id":null,"name":"Peony","level":2,"price":3299,"plantStatus":3,"plantImg":"/images/peonies5_background.png"},"Japan Maple":{"id":null,"name":"Japan Maple","level":2,"price":3699,"plantStatus":3,"plantImg":"/images/japanesemaplebonsai5_background.png"},"Chamomile":{"id":null,"name":"Chamomile","level":2,"price":3999,"plantStatus":3,"plantImg":"images/chamomile5_background.png"},"Carnation":{"id":null,"name":"Carnation","level":3,"price":4090,"plantStatus":3,"plantImg":"/images/carnation5_background.png"},"Chinese Lantern":{"id":null,"name":"Chinese Lantern","level":3,"price":4399,"plantStatus":3,"plantImg":"/images/chineselantern4_background.png"},"Bell Pepper":{"id":null,"name":"Bell Pepper","level":2,"price":4499,"plantStatus":3,"plantImg":"/images/bellpeppers5_background.png"},"Amaryllis":{"id":null,"name":"Amaryllis","level":2,"price":4999,"plantStatus":3,"plantImg":"images/amaryllis5_background.png"},"Cherry Blossom":{"id":null,"name":"Cherry Blossom","level":2,"price":5499,"plantStatus":3,"plantImg":"/images/cherryblossombonsai4_background.png"}}'
-        self._plantDict.set(plantDict)
 
     def on_update(self) -> None:
         super().on_update()
@@ -72,7 +76,7 @@ class BonSai(IconScoreBase, TokenStandard):
     @external(readonly=True)
     def symbol(self) -> str:
         return "BS"
-    
+
     @external(readonly=True)
     def getNameById(self, _tokenId: int) -> str:
         return self._tokenName[_tokenId]
@@ -86,17 +90,17 @@ class BonSai(IconScoreBase, TokenStandard):
     @external(readonly=True)
     def getLatestTokenIndex(self) -> int:
         return self._tokenIndexCount.get()
-    
+
     @external(readonly=True)
     def getPlantDict(self, _address: Address) -> str:
         return self._plantDict[_address]
-    
+
     @external
     def setPlantDict(self, _plants: str, _address: Address):
         if self.msg.sender != self.owner:
             revert("Permission Denied")
         self._plantDict[_address] = _plants
-    
+
     def getListBonsai(self, _address: Address) -> list:
         bonsais = []
         numberOfBonsais = self._tokenIndexCount.get()
@@ -115,12 +119,11 @@ class BonSai(IconScoreBase, TokenStandard):
             if self._tokenOwner[tokenId] == _address:
                 # bonsais.append(tokenId)
                 bonsais.append(self._tokenName[tokenId])
-        return bonsais  
-    
+        return bonsais
+
     @external(readonly=True)
     def getAllBonsaiOfUser(self, _address: Address) -> list:
         return self.getListBonsai(_address)
-        
 
     @external(readonly=True)
     def getMyBonsais(self) -> list:
@@ -180,7 +183,8 @@ class BonSai(IconScoreBase, TokenStandard):
         self._remove_tokens_from(_from, _tokenId)
         self._add_tokens_to(_to, _tokenId, _price, _name)
         self.Transfer(_from, _to, _tokenId, _price, _name)
-        Logger.debug(f'Transfer({_from}, {_to}, {_tokenId}, {_price}, {_name} TAG)')
+        Logger.debug(
+            f'Transfer({_from}, {_to}, {_tokenId}, {_price}, {_name} TAG)')
 
     @external
     @payable
@@ -192,10 +196,11 @@ class BonSai(IconScoreBase, TokenStandard):
         if _price <= 0 or _price > 100 * 10 ** 18:
             Logger.info(f'Price {_price} out of range.', TAG)
             revert(f'Price {_price} out of range.')
-        
+
         self._add_tokens_to(self.msg.sender, _tokenId, _price, _tokenName)
         self._tokenIndexCount.set(_tokenId)
-        self.Transfer(self._ZERO_ADDRESS, self.msg.sender, _tokenId, _price, _tokenName)
+        self.Transfer(self._ZERO_ADDRESS, self.msg.sender,
+                      _tokenId, _price, _tokenName)
 
     @external
     def mint(self, _to: Address, _price: int, _tokenName: str):

@@ -5,6 +5,8 @@ import {
   getBalanceOxyIcon,
   mintBonsaiFrom,
   sleep,
+  getPlantDict,
+  setPlantDict,
 } from 'helpers';
 import { PLANT_STATUS, plantsInitDic } from 'constant';
 
@@ -81,13 +83,20 @@ export const getBalanceBonsai = () => async (dispatch, getState) => {
   let address = state.walletAddress;
   const balanceBonsai = await getBalanceBonsaiIcon(address); //[bonsainames[], bonsaiIds[]]
 
-  let plants = JSON.parse(JSON.stringify(plantsInitDic));
+  let plants = await getPlantDict(address);
+  // if this is first time plants in contract is undefined
+  if (plants === undefined) {
+    plants = JSON.parse(JSON.stringify(plantsInitDic));
+    plants = Object.values(plants);
+  }
   // if not error
   if (balanceBonsai && balanceBonsai !== -1) {
     balanceBonsai[0].forEach((name, index) => {
-      if (name in plants) {
-        plants[name].plantStatus = PLANT_STATUS.PLANTED;
-        plants[name].id = balanceBonsai[1][index];
+      var x;
+      // if not found plant.name in plants index return -1
+      if ((x = plants.findIndex((plant) => plant.name === name)) !== -1) {
+        plants[x].plantStatus = PLANT_STATUS.PLANTED;
+        plants[x].id = balanceBonsai[1][index];
       }
     });
   } else {
@@ -125,7 +134,7 @@ export const transferPlantLocation = (secondPlant) => async (dispatch, getState)
 
   let firstPlant = state.firstPlant;
   let plants = state.plants;
-
+  let address = state.walletAddress;
   // transfer
   let temp = plants[firstPlant];
   plants[firstPlant] = plants[secondPlant];
@@ -133,6 +142,7 @@ export const transferPlantLocation = (secondPlant) => async (dispatch, getState)
 
   // update index
   plants.map((plant, index) => (plant.index = index));
+  await setPlantDict(plants, address);
 
   dispatch({
     type: CHANGE_PLANT_STATUS,
@@ -147,26 +157,7 @@ export const mintBonsai = (bonsai) => async (dispatch, getState) => {
   mintBonsaiFrom(address, bonsai);
   await sleep(5000);
 
-  const balanceBonsai = await getBalanceBonsaiIcon(address);
-  let plants = JSON.parse(JSON.stringify(plantsInitDic));
-  // if not error
-  if (balanceBonsai && balanceBonsai !== -1) {
-    balanceBonsai[0].forEach((name, index) => {
-      if (name in plants) {
-        plants[name].plantStatus = PLANT_STATUS.PLANTED;
-        plants[name].id = balanceBonsai[1][index];
-      }
-    });
-  }
-
-  plants = Object.values(plants);
-  plants.map((plant, index) => (plant.index = index));
-
-  dispatch({
-    type: GET_BALANCE_BONSAI,
-    plants,
-    balanceBonsai: balanceBonsai[0],
-  });
+  dispatch(getBalanceBonsai());
 };
 
 export const SET_LOADING = 'SET_LOADING';
