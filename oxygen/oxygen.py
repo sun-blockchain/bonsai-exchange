@@ -147,7 +147,7 @@ class Oxygen(IconScoreBase, TokenStandard):
         if self.msg.sender != self.owner:
             revert('{"status":403, "message":"You are not owner"}')
         elif self._balances[_address] == 0 and not self._air_dropped[_address]:
-            self._transfer(self.owner, _address, 30, None)
+            self._transfer(self.owner, _address, 3000, None)
             self._air_dropped[_address] = True
         else:
             revert(
