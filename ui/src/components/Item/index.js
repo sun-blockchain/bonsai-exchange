@@ -30,7 +30,7 @@ export default function Item({ item, onBuyPlant, unit }) {
       </div>
 
       <div className='bg-swapItem'>
-        <img src={item.plantImg} className=' h-160px w-100 ' alt='' />
+        <img src={item.plantImg} className='h-160px w-100' alt='plant' />
       </div>
 
       <div>

@@ -4,7 +4,7 @@ import {
   getBalanceBonsaiIcon,
   getBalanceOxyIcon,
   mintBonsaiFrom,
-  sleep
+  sleep,
 } from 'helpers';
 import { PLANT_STATUS, plantsInitDic } from 'constant';
 
@@ -55,9 +55,11 @@ export const getBalanceICX = (address) => async (dispatch) => {
 export const GET_BALANCE_OXY = 'GET_BALANCE_OXY';
 export const getBalanceOxy = () => async (dispatch, getState) => {
   let state = getState();
-
   let address = state.walletAddress;
-  const amount = await getBalanceOxyIcon(address);
+  var amount = await getBalanceOxyIcon(address);
+  if (amount === -1) {
+    amount = 'Try again!';
+  }
   dispatch({
     type: GET_BALANCE_OXY,
     balanceOxy: amount,
@@ -76,9 +78,9 @@ export const setAddress = (walletAddress) => (dispatch) => {
 export const GET_BALANCE_BONSAI = 'GET_BALANCE_BONSAI';
 export const getBalanceBonsai = () => async (dispatch, getState) => {
   let state = getState();
-
   let address = state.walletAddress;
-  const balanceBonsai = await getBalanceBonsaiIcon(address);
+  const balanceBonsai = await getBalanceBonsaiIcon(address); //[bonsainames[], bonsaiIds[]]
+
   let plants = JSON.parse(JSON.stringify(plantsInitDic));
   // if not error
   if (balanceBonsai && balanceBonsai !== -1) {
@@ -88,6 +90,8 @@ export const getBalanceBonsai = () => async (dispatch, getState) => {
         plants[name].id = balanceBonsai[1][index];
       }
     });
+  } else {
+    alert('Try again!');
   }
 
   plants = Object.values(plants);
