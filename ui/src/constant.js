@@ -1,7 +1,7 @@
 const PLANT_STATUS = {
   PLANTED: 1,
-  INSTOCK: 2,
-  INSTORE: 3,
+  INSTORE: 2,
+  INSTOCK: 3,
 };
 
 Object.freeze(PLANT_STATUS);
@@ -85,7 +85,7 @@ const plantsInitDic = {
     level: 3,
     price: 40,
     plantStatus: PLANT_STATUS.INSTORE,
-    plantImg: '/images/flamingoflower4_background.png',
+    plantImg: '/images/carnation5_background.png',
   },
   'Bonsai 10': {
     id: null,
@@ -101,7 +101,7 @@ const plantsInitDic = {
     level: 2,
     price: 30,
     plantStatus: PLANT_STATUS.INSTORE,
-    plantImg: 'images/chamomile4_background.png',
+    plantImg: 'images/amaryllis5_background.png',
   },
 };
 
