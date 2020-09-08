@@ -93,3 +93,15 @@ node claimOxygen.js
 ```bash
 node buyOxygenWithICX.js --value=
 ```
+
+### Get balance ICX of contract
+
+```bash
+node getBalanceICX.js --address=
+```
+
+### Withdraw ICX by owner
+
+```bash
+node withDrawICX.js --value=
+```
