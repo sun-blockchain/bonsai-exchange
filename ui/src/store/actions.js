@@ -168,3 +168,11 @@ export const mintBonsai = (bonsai) => async (dispatch, getState) => {
     balanceBonsai: balanceBonsai[0],
   });
 };
+
+export const SET_LOADING = 'SET_LOADING';
+export const setLoading = (loading) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING,
+    loading,
+  });
+};

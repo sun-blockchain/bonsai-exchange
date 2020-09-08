@@ -13,6 +13,7 @@ const initialState = {
   tourStep: 0,
   balanceBonsai: [],
   firstPlant: null, // for trigger transfer plant posotion
+  loading: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -62,6 +63,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         firstPlant: action.firstPlant,
+      };
+    case connect.SET_LOADING:
+      return {
+        ...state,
+        loading: action.loading,
       };
     default:
       return state;

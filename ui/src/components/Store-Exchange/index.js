@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { PLANT_STATUS } from 'constant';
 import Item from 'components/Item';
 import { transferOxytoBuyBonsai } from 'helpers';
-
 import './style.css';
 
 function Store({ onClose }) {
