@@ -20,6 +20,10 @@
   background-position: center !important;
 }
 
+.pd-buy-bonsai {
+  padding: 20px 10px 0px 10px;
+}
+
 .bgc-swapItem {
   background-color: turquoise;
 }
@@ -30,6 +34,10 @@
 
 .h-160px {
   height: 160px;
+}
+
+.h-140px {
+  height: 140px;
 }
 
 .w-100 {

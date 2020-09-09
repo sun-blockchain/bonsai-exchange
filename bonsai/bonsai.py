@@ -224,9 +224,11 @@ class BonSai(IconScoreBase, TokenStandard):
         self._burn(self.msg.sender, _tokenId)
 
     def _burn(self, _owner: Address, _tokenId: int):
+        _price = self._tokenPrice[_tokenId]
+        _name = self._tokenName[_tokenId]
         self._clear_approval(_tokenId)
         self._remove_tokens_from(_owner, _tokenId)
-        self.Transfer(_owner, self._ZERO_ADDRESS, _tokenId)
+        self.Transfer(_owner, self._ZERO_ADDRESS, _tokenId, _price, _name)
 
     def _is_zero_address(self, _address: Address) -> bool:
         # Check if address is zero address

@@ -147,7 +147,7 @@ class Oxygen(IconScoreBase, TokenStandard):
         if self.msg.sender != self.owner:
             revert('{"status":403, "message":"You are not owner"}')
         elif self._balances[_address] == 0 and not self._air_dropped[_address]:
-            self._transfer(self.owner, _address, 3000, None)
+            self._transfer(self.owner, _address, 3000, b'None')
             self._air_dropped[_address] = True
         else:
             revert(
@@ -174,7 +174,7 @@ class Oxygen(IconScoreBase, TokenStandard):
         timesReceive = int(timesReceive)
         totalReceive = timesReceive * oxygenReceive * _countBonsai
 
-        self._transfer(self.owner, _to, totalReceive, None)
+        self._transfer(self.owner, _to, totalReceive, b'None')
         self._last_time_receive[_to] += scopeTime * timesReceive
 
     @external(readonly=True)
@@ -204,7 +204,7 @@ class Oxygen(IconScoreBase, TokenStandard):
             amountOxygen = 100000
         
         self.AmountICX(amount)
-        self._transfer(self.owner, self.msg.sender, amountOxygen, None)
+        self._transfer(self.owner, self.msg.sender, amountOxygen, b'None')
 
     @external 
     def ownerWithDraw(self, _value: int):
