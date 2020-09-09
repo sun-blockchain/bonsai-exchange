@@ -48,6 +48,10 @@ export const ConnectWallet = () => {
             if (tx) {
               await dispatch(actions.mintBonsai(bonsai));
               dispatch(actions.getBalanceOxy());
+
+              setTimeout(() => {
+                dispatch(actions.updateTourStep(3));
+              }, 200);
             } else {
               message.error('Transaction Has Failed !', 1.5);
             }

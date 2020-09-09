@@ -1,23 +1,34 @@
-import { Col, Button } from 'antd';
+import { Col, Button, message } from 'antd';
 import React, { useEffect } from 'react';
-import './style.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateTourStep } from 'store/actions';
+
+import './style.css';
 
 export default function Item({ item, onBuyPlant, unit }) {
   const dispatch = useDispatch();
+  const balanceOxy = useSelector((state) => state.balanceOxy);
 
   useEffect(() => {
-    if (item.id === 0)
-      setTimeout(async () => {
+    if (item.index === 0)
+      setTimeout(() => {
         dispatch(updateTourStep(2));
       }, 300);
-  }, [item.id, dispatch]);
+  }, [item.index, dispatch]);
 
-  const handleBuy = () => {
+  const handleBuy = (price) => {
+    // set up tour for first-use user
     dispatch(updateTourStep(100));
-    localStorage.setItem('noNeedTour', true);
-    onBuyPlant();
+
+    // Check whether you have enough oxygen to buy plants.
+    if (balanceOxy >= price) {
+      onBuyPlant();
+    } else {
+      message.warning(
+        `You don't have enough Oxygen to buy this bonsai. Please buy oxygen or wait for plants to generate oxygen`,
+        1.5
+      );
+    }
   };
 
   return (
@@ -35,7 +46,7 @@ export default function Item({ item, onBuyPlant, unit }) {
 
       <div>
         {/* <img src={oxyImg} className='oxy-img' alt='oxy' /> */}
-        <Button className='w-100 r-bot-10px' type='primary' onClick={() => handleBuy()}>
+        <Button className='w-100 r-bot-10px' type='primary' onClick={() => handleBuy(item.price)}>
           <strong className=''>
             {item.price} {unit}
           </strong>

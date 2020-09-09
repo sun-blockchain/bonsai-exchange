@@ -60,7 +60,21 @@ export default function TourNewbie() {
     },
     {
       selector: '.first-bonsai',
-      content: `Buy it `,
+      content: ({ goTo }) => (
+        <div>{tourStep === 3 ? goTo(4) : `Buy it and choose a position on the shelf to place`}</div>
+      ),
+    },
+    {
+      selector: '.on-shelf',
+      content: `Each bonsai will generate 1 Oxygen every 30 seconds`,
+    },
+    {
+      selector: '.buy-oxy',
+      content: `You can buy more oxygen with ICX here`,
+    },
+    {
+      selector: '.move-plant',
+      content: `You can transfer bonsai to others or change bonsai location on the shelf here`,
     },
   ];
 
