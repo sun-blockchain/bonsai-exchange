@@ -7,6 +7,7 @@ import {
   sleep,
   getPlantDict,
   setPlantDict,
+  isTxSuccess,
 } from 'helpers';
 import { PLANT_STATUS, plantsInitDic } from 'constant';
 
@@ -166,4 +167,18 @@ export const setLoading = (loading) => (dispatch) => {
     type: SET_LOADING,
     loading,
   });
+};
+
+export const removePlant = (id) => async (dispatch, getState) => {
+  let state = getState();
+  let plants = state.plants;
+  let address = state.walletAddress;
+  const x = plants.findIndex((plant) => plant.id === id);
+
+  plants[x].id = null;
+  plants[x].plantStatus = PLANT_STATUS.INSTORE;
+
+  const txHash = await setPlantDict(plants, address);
+  const isSuccess = await isTxSuccess(txHash);
+  if (isSuccess) dispatch(getBalanceBonsai());
 };

@@ -346,6 +346,7 @@ export const getPlantDict = async (address) => {
   }
 };
 
+// set Plant Dict
 export const setPlantDict = async (plants, address) => {
   const wallet = IconWallet.loadPrivateKey(process.env.REACT_APP_PRIVATE_KEY);
   plants = JSON.stringify(plants);
@@ -373,4 +374,16 @@ export const setPlantDict = async (plants, address) => {
   } catch (err) {
     console.log({ err });
   }
+};
+
+// Get detail bonsai when transfer it
+export const getTransferBonsaiID = async (txHash) => {
+  return new Promise(async (resolve, reject) => {
+    await sleep(5000);
+    const txObject = await iconService.getTransactionResult(txHash).execute();
+    if (txObject['status'] === 1) {
+      const data = txObject.eventLogs[0].indexed[3];
+      resolve(data);
+    } else return resolve(false);
+  });
 };

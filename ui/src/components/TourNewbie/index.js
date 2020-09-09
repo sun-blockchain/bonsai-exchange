@@ -47,7 +47,7 @@ export default function TourNewbie() {
     },
     {
       selector: '.connect-wallet',
-      content: 'We give you 30 oxygen to get you started',
+      content: 'We give you 3000 oxygen to get you started',
     },
     {
       selector: '.buy-bonsai',
@@ -79,7 +79,10 @@ export default function TourNewbie() {
   ];
 
   const disableBody = (target) => disableBodyScroll(target);
-  const enableBody = (target) => enableBodyScroll(target);
+  const enableBody = (target) => {
+    enableBodyScroll(target);
+    localStorage.setItem('noNeedTour', true);
+  };
 
   return (
     <>

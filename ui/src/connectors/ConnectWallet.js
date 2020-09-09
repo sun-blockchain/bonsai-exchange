@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from 'store/actions';
-import { isTxSuccess, sleep, receiveOxygen } from 'helpers';
+import { isTxSuccess, sleep, receiveOxygen, getTransferBonsaiID } from 'helpers';
 
 export const ConnectWallet = () => {
   const address = useSelector((state) => state.walletAddress);
@@ -49,9 +49,7 @@ export const ConnectWallet = () => {
               await dispatch(actions.mintBonsai(bonsai));
               dispatch(actions.getBalanceOxy());
 
-              setTimeout(() => {
-                dispatch(actions.updateTourStep(3));
-              }, 200);
+              dispatch(actions.updateTourStep(3));
             } else {
               message.error('Transaction Has Failed !', 1.5);
             }
@@ -69,8 +67,13 @@ export const ConnectWallet = () => {
           dispatch(actions.setLoading(true));
           if (JSON.parse(localStorage.getItem('transferBonsai'))) {
             localStorage.removeItem('transferBonsai');
-            await sleep(5000);
-            dispatch(actions.getBalanceBonsai());
+            const bonsaiID = await getTransferBonsaiID(payload.result);
+            if (bonsaiID) {
+              await sleep(5000);
+              dispatch(actions.removePlant(bonsaiID));
+              dispatch(actions.getBalanceBonsai());
+            }
+
             dispatch(actions.setLoading(false));
           }
         }
