@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Row } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { PLANT_STATUS } from 'constant';
 import Item from 'components/Item';
 import { transferOxytoBuyBonsai } from 'helpers';
+import * as actions from 'store/actions';
+
 import './style.css';
 
 function Store({ onClose }) {
+  const dispatch = useDispatch();
   const plants = useSelector((state) => state.plants);
 
   const [plantsForSale, setPlantsForSale] = useState(
@@ -21,6 +24,7 @@ function Store({ onClose }) {
 
   const handleBuyPlant = (item) => {
     transferOxytoBuyBonsai(address, item);
+    dispatch(actions.setFirstPlant(item.index));
     onClose();
   };
 

@@ -104,7 +104,7 @@ export const airDropOxyIcon = async (address) => {
 };
 
 // transfer oxy to buy bonsai
-export const transferOxytoBuyBonsai = async (address, item) => {
+export const transferOxytoBuyBonsai = (address, item) => {
   if (address) {
     try {
       const txObj = new IconBuilder.CallTransactionBuilder()
@@ -170,7 +170,7 @@ export const mintBonsaiFrom = async (address, item) => {
 };
 
 // get transaction result success or not
-export const isTxSuccess = async (txHash) => {
+export const isTxSuccess = (txHash) => {
   return new Promise(async (resolve, reject) => {
     await sleep(5000);
     const txObject = await iconService.getTransactionResult(txHash).execute();
@@ -239,14 +239,14 @@ export const getRemainingTimeReceiveOxy = async (address) => {
   }
 };
 
-export const buyOxygenWithICX = async (address, numOxy) => {
+export const buyOxygenWithICX = (address, numOxy) => {
   try {
     let icx = 0;
-    if (numOxy === 10) {
+    if (numOxy === 1000) {
       icx = 1;
-    } else if (numOxy === 100) {
+    } else if (numOxy === 10000) {
       icx = 9;
-    } else if (numOxy === 1000) {
+    } else if (numOxy === 100000) {
       icx = 80;
     }
 
@@ -315,5 +315,62 @@ export const transferBonsai = (from, to, bonsaiId) => {
     localStorage.setItem('transferBonsai', true);
   } catch (error) {
     console.log({ error });
+  }
+};
+
+// get Plant Dict from contract
+export const getPlantDict = async (address) => {
+  try {
+    const txObj = new IconBuilder.CallBuilder()
+      .from(address)
+      .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
+      .method('getPlantDict')
+      .params({
+        _address: address,
+      })
+      .build();
+
+    let result = await iconService.call(txObj).execute();
+    if (result) {
+      result = JSON.parse(result);
+      return result;
+    } else {
+      // return undefiled
+      return result;
+    }
+    // return result;
+  } catch (err) {
+    console.log({ err });
+    // return an error code
+    return -1;
+  }
+};
+
+export const setPlantDict = async (plants, address) => {
+  const wallet = IconWallet.loadPrivateKey(process.env.REACT_APP_PRIVATE_KEY);
+  plants = JSON.stringify(plants);
+
+  try {
+    const txObj = new IconBuilder.CallTransactionBuilder()
+      .from(process.env.REACT_APP_OWNER)
+      .to(process.env.REACT_APP_ADDRESS_CONTRACT_BONSAI)
+      .stepLimit(IconConverter.toBigNumber('2000000'))
+      .nid(IconConverter.toBigNumber('3'))
+      .nonce(IconConverter.toBigNumber(new Date().getTime().toString()))
+      .version(IconConverter.toBigNumber('3'))
+      .timestamp(new Date().getTime() * 1000)
+      .method('setPlantDict')
+      .params({
+        _plants: plants,
+        _address: address,
+      })
+      .build();
+
+    const signedTransaction = new SignedTransaction(txObj, wallet);
+    const txHash = await iconService.sendTransaction(signedTransaction).execute();
+
+    return txHash;
+  } catch (err) {
+    console.log({ err });
   }
 };
