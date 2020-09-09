@@ -43,6 +43,7 @@ class BonSai(IconScoreBase, TokenStandard):
     _TOKEN_APPROVALS = 'token_approvals'  # Track token approved owner against token ID
     _TOKEN_PRICE = 'token_price'
     _TOKEN_NAME = 'token_name'
+    _PLANT_DICT = 'plant_dict'
 
     _ZERO_ADDRESS = Address.from_prefix_and_int(AddressPrefix.EOA, 0)
 
@@ -54,6 +55,7 @@ class BonSai(IconScoreBase, TokenStandard):
         self._tokenApprovals = DictDB(self._TOKEN_APPROVALS, db, value_type=Address)
         self._tokenPrice = DictDB(self._TOKEN_PRICE, db, value_type=int)
         self._tokenName = DictDB(self._TOKEN_NAME, db, value_type=str)
+        self._plantDict= DictDB(self._PLANT_DICT, db, value_type=str)
 
     def on_install(self) -> None:
         super().on_install()
@@ -82,6 +84,16 @@ class BonSai(IconScoreBase, TokenStandard):
     @external(readonly=True)
     def getLatestTokenIndex(self) -> int:
         return self._tokenIndexCount.get()
+    
+    @external(readonly=True)
+    def getPlantDict(self, _address: Address) -> str:
+        return self._plantDict[_address]
+    
+    @external
+    def setPlantDict(self, _plants: str, _address: Address):
+        if self.msg.sender != self.owner:
+            revert("Permission Denied")
+        self._plantDict[_address] = _plants
     
     def getListBonsai(self, _address: Address) -> list:
         bonsais = []
