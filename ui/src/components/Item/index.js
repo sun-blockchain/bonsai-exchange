@@ -22,7 +22,7 @@ export default function Item({ item, onBuyPlant, unit }) {
 
   return (
     <Col
-      className={`gutter-row r-bot-10px r-top-10px ${item.id === 0 ? 'first-bonsai' : ''}`}
+      className={`gutter-row r-bot-10px r-top-10px ${item.index === 0 ? 'first-bonsai' : ''}`}
       span={8}
     >
       <div className='align-center'>

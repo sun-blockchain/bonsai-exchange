@@ -17,7 +17,8 @@ function App() {
       {/* UI */}
 
       {/* Tour tutorial for fisrt user */}
-      {localStorage.getItem('noNeedTour') ? <></> : <TourNewbie />}
+      <TourNewbie />
+      {/* {localStorage.getItem('noNeedTour') ? <></> : <TourNewbie />} */}
 
       <Spin spinning={loading} size='large' tip='Loading...'></Spin>
       <Header className='bgc-w h-50px p-10px r-bot-10px'>

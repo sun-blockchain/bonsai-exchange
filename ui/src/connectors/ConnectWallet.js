@@ -17,14 +17,17 @@ export const ConnectWallet = () => {
   }, [address, dispatch]);
 
   useEffect(() => {
-    if (address && numBonsai > 0) {
-      const init = async () => {
-        receiveOxygen(address, numBonsai);
-        await sleep(5000);
-        await dispatch(actions.getBalanceOxy());
-      };
-      init();
-    }
+    let interval = setInterval(() => {
+      if (address && numBonsai > 0) {
+        const init = async () => {
+          receiveOxygen(address, numBonsai);
+          await sleep(5000);
+          await dispatch(actions.getBalanceOxy());
+        };
+        init();
+      }
+    }, 30000);
+    return () => clearInterval(interval);
   }, [address, dispatch, numBonsai]);
 
   const eventHandler = async (event) => {
