@@ -51,7 +51,7 @@ function Top() {
         {address ? (
           <img
             src={plusImg}
-            className='oxy-img oxi-pointer '
+            className='oxy-img oxi-pointer buy-oxy'
             alt='plus'
             onClick={() => setOpenModalBuyOxy(!openModalBuyOxy)}
           />

@@ -8,7 +8,7 @@ export default function Plant({ plant }) {
   return (
     <div className='flexalign'>
       {!!plant && plant.plantStatus === PLANT_STATUS.PLANTED ? (
-        <div className='plant'>
+        <div className={`plant ${plant.id ? 'on-shelf' : ''}`}>
           <div className='stem'>
             <img src={plant.plantImg} alt='' className='plantImg' />
             <Bubbles />

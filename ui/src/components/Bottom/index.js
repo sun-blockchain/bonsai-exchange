@@ -20,10 +20,16 @@ function Bottom() {
     dispatch(actions.updateTourStep(100));
   };
 
+  const handleOpenModalPlant = () => {
+    setOpenModalPlant(!openModalPlant);
+    dispatch(actions.updateTourStep(100));
+    localStorage.setItem('noNeedTour', true);
+  };
+
   return (
     <div>
       <div className='bot'>
-        <Button className='plantLst bgc-w' onClick={() => setOpenModalPlant(!openModalPlant)}>
+        <Button className='plantLst bgc-w move-plant' onClick={() => handleOpenModalPlant()}>
           <img src={plantImg} alt='icon' />
         </Button>
         <Button className='bstLst bgc-w buy-bonsai' onClick={() => handleOpen()}>
