@@ -9,10 +9,7 @@ const txHash = argv.txhash;
 async function getTxResult() {
   try {
     const txObject = await iconService.getTransactionResult(txHash).execute();
-    console.log({ txObject });
-    if (txObject.eventLogs[0].indexed[1]) {
-      console.log(parseInt(txObject.eventLogs[0].indexed[1]));
-    }
+    console.log(txObject);
   } catch (err) {
     console.log({ err });
   }
