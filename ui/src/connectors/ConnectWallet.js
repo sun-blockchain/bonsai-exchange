@@ -10,19 +10,29 @@ export const ConnectWallet = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (address) {
-      dispatch(actions.getBalanceOxy());
-      dispatch(actions.getBalanceBonsai());
-    }
-  }, [address, dispatch]);
+    const main = async () => {
+      if (address) {
+        dispatch(actions.getBalanceOxy());
+        dispatch(actions.getBalanceBonsai());
+
+        // request receive Oxygen
+        receiveOxygen(address, numBonsai);
+        await sleep(5000);
+        dispatch(actions.getBalanceOxy());
+      }
+    };
+
+    main();
+  }, [address, numBonsai, dispatch]);
 
   useEffect(() => {
+    // receive Oxygen every interval 30s
     let interval = setInterval(() => {
       if (address && numBonsai > 0) {
         const init = async () => {
           receiveOxygen(address, numBonsai);
           await sleep(5000);
-          await dispatch(actions.getBalanceOxy());
+          dispatch(actions.getBalanceOxy());
         };
         init();
       }
@@ -70,7 +80,6 @@ export const ConnectWallet = () => {
             const bonsaiID = await getTransferBonsaiID(payload.result);
             if (bonsaiID) {
               await sleep(5000);
-              dispatch(actions.removePlant(bonsaiID));
               dispatch(actions.getBalanceBonsai());
             }
 
